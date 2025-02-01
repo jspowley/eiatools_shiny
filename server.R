@@ -12,7 +12,11 @@ server <- function(input, output) {
     # Using the descriptive name, find the table id associated to the API. Then query the selected table for display
     table_id <- eiatools::app_dictionary$tables %>% dplyr::filter(route_1_name == input$table_select) %>% dplyr::pull(route_1_id)
     table_init <- eiatools::data_index[(eiatools::data_index %>% names()) == table_id] %>% .[[1]]
-    output$displayed_table <- renderDT(table_init)
+    output$displayed_table <- renderDT(datatable(
+                                      table_init,
+                                      editable = list(target = "cell", disable = list(columns = c(1, 2))),
+                                      selection = 'multiple'
+                                      ))
     
     # Rendering the frequency options
     freqs <- table_init %>% pull(freq) %>% unique()
