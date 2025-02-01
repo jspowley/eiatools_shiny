@@ -19,7 +19,9 @@ ui <- bslib::page_navbar(
                                            selected = "Petroleum"),
                     
                     # Frequency
-                        shiny::uiOutput("freq_ui")
+                        shiny::uiOutput("freq_ui"),
+                    # Facets
+                        shiny::uiOutput("facet_ui")
                     ),
                 bslib::layout_columns(
                     bslib::card(

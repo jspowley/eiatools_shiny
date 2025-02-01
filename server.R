@@ -32,7 +32,7 @@ server <- function(input, output) {
     for(i in 1:length(facets)){
       
       f <- facets[[i]]
-      print(f)
+      # print(f)
       
       facet_options <- list()
       f_desc <- facet_desc_map %>% dplyr::filter(table == table_id & facet == f) %>% dplyr::pull(desc)
@@ -50,17 +50,18 @@ server <- function(input, output) {
       # print(str(facet_options_df %>% head(3)))
       # print("done")
       
-      facet_options <- facet_options_df %>% dplyr::select(dplyr::any_of(f)) %>% dplyr::pull(f)
-      names(facet_options) <- facet_options_df %>% dplyr::select(dplyr::any_of(f_desc)) %>% dplyr::pull(f_desc)
-      facet_options <- append(facet_options, list("(None)" = NA))
-      print(str(facet_options[1:5]))
+      facet_map <- facet_options_df %>% dplyr::select(dplyr::any_of(f)) %>% dplyr::pull(f)
+      names(facet_map) <- facet_options_df %>% dplyr::select(dplyr::any_of(f_desc)) %>% dplyr::pull(f_desc)
+      facet_map <- append(facet_map, list("(None)" = NA))
       
-      print("assignment")
-      facet_ui[[i]] <- shiny::selectInput(inputId = f,
-                                          label = paste0(stringr::str_to_title(f),":"),
-                                          choices = facet_options)
-      print("exit")
+      # print("assignment")
+      facet_ui[[i]] <- shiny::selectizeInput(inputId = f,
+                                            label = paste0(stringr::str_to_title(f),":"),
+                                            choices = names(facet_map))
+      # print("exit")
     }
+    
+    output$facet_ui <- shiny::renderUI({facet_ui})
     
     # For dynamic reference to the facet !!inputs!!, use input[names(input) == "key"]
     # Make sure there's a (none) option and it's selected by default.
