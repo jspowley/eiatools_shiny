@@ -6,7 +6,8 @@ server <- function(input, output) {
   
   output$displayed_table <- renderDT(eiatools::data_index[(eiatools::data_index %>% names()) == "petroleum"] %>% .[[1]])
   r <- shiny::reactiveValues()
-  input_chain <- 
+  
+  input_chain <- reactive({x <- reactiveValuesToList(input)})
   
   # When a table is selected, we want to display that table, and load it's facet input panels.
   shiny::observeEvent(input$table_select, {
@@ -41,7 +42,6 @@ server <- function(input, output) {
     print("Table Changes Occured, Updating")
     # Rendering the facet options
     facets <- unique_facets(r$table)
-    facet_ui <- list()
     facet_schema <- list()
     
     print("Beginning Facet Mapping")
@@ -66,8 +66,8 @@ server <- function(input, output) {
         dplyr::distinct() %>% 
         dplyr::group_by(!!sym(f_desc)) %>% 
         dplyr::summarise(!!sym(f) := list(list(unique(!!sym(f)))), .groups = "keep") %>%  # Annoyingly enough, 1:many relationships exist, especially where multiple codes exist for the same PADD.
-        dplyr::ungroup() #%>% 
-        #head(5)
+        dplyr::ungroup() %>% 
+        head(5)
         
       # print(str(facet_options_df %>% head(3)))
       # print("done")
@@ -84,13 +84,20 @@ server <- function(input, output) {
       # print("exit")
     }
     
+    
     output$facet_ui <- shiny::renderUI({facet_ui})
     r$facets <- facets
     
   })
   
-  observeEvent(r$facets, {
-    print("FACETS CHANGED")
+  observeEvent(input_chain, {
+    print("INPUTS CHAIN CHANGED")
+    print(input_chain())
+  })
+  
+  observeEvent(input, {
+    print("INPUTS CHANGED")
+    print(input)
   })
     
     # For dynamic reference to the facet !!inputs!!, use input[names(input) == "key"]
