@@ -16,6 +16,8 @@ server <- function(input, output) {
     
     # Rendering the frequency options
     freqs <- table_init %>% pull(freq) %>% unique()
+    names(freqs) <- stringr::str_to_title(freqs)
+    
     output$freq_ui <- shiny::renderUI({
       shiny::selectInput(inputId = "frequency",
                          label = "Frequency:",
@@ -24,12 +26,13 @@ server <- function(input, output) {
     
     # Rendering the facet options
     facets <- unique_facets(table_init)
+    facet_ui <- list()
     facet_schema <- list()
     
     for(i in 1:length(facets)){
       f <- facets[i]
-      facet_schema[[i]] <- table_init %>% dplyr::select(dplyr::any_of(c(f, paste0(f,"-name")))) %>% dplyr::distinct()
-      names(facet_schema[i]) <- f
+      
+      facet_ui[[i]] <- append(facet_ui, NA)
     }
     
     # For dynamic reference to the facet !!inputs!!, use input[names(input) == "key"]
