@@ -30,15 +30,42 @@ server <- function(input, output) {
     facet_schema <- list()
     
     for(i in 1:length(facets)){
-      f <- facets[i]
       
-      facet_ui[[i]] <- append(facet_ui, NA)
+      f <- facets[[i]]
+      print(f)
+      
+      facet_options <- list()
+      f_desc <- facet_desc_map %>% dplyr::filter(table == table_id & facet == f) %>% dplyr::pull(desc)
+      
+      # print(f_desc)
+      
+      facet_options_df <- 
+        table_init %>% 
+        dplyr::select(dplyr::any_of(c(f, f_desc))) %>% 
+        dplyr::distinct() %>% 
+        dplyr::group_by(!!sym(f_desc)) %>% 
+        dplyr::summarise(!!sym(f) := list(list(unique(!!sym(f)))), .groups = "keep") %>%  # Annoyingly enough, 1:many relationships exist, especially where multiple codes exist for the same PADD.
+        dplyr::ungroup()
+        
+      # print(str(facet_options_df %>% head(3)))
+      # print("done")
+      
+      facet_options <- facet_options_df %>% dplyr::select(dplyr::any_of(f)) %>% dplyr::pull(f)
+      names(facet_options) <- facet_options_df %>% dplyr::select(dplyr::any_of(f_desc)) %>% dplyr::pull(f_desc)
+      facet_options <- append(facet_options, list("(None)" = NA))
+      print(str(facet_options[1:5]))
+      
+      print("assignment")
+      facet_ui[[i]] <- shiny::selectInput(inputId = f,
+                                          label = paste0(stringr::str_to_title(f),":"),
+                                          choices = facet_options)
+      print("exit")
     }
     
     # For dynamic reference to the facet !!inputs!!, use input[names(input) == "key"]
     # Make sure there's a (none) option and it's selected by default.
-    print(str(facet_schema))
-    facet_ui <- list()
+    # print(str(facet_schema))
+    # facet_ui <- list()
     
     #facet_ui <- list()
     #for(f in facets){
