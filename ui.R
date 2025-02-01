@@ -11,9 +11,15 @@ ui <- bslib::page_navbar(
                 bslib::card(
                     bslib::card_header("Filters"),
                     # Content to populate filter selections here. User inputs
+                    
+                    # Table
                         shiny::selectInput(inputId = "table_select",
-                                           label = "Select your table:",
-                                           choices = eiatools::app_dictionary$tables %>% dplyr::pull(route_1_name))
+                                           label = "Select table:",
+                                           choices = eiatools::app_dictionary$tables %>% dplyr::pull(route_1_name),
+                                           selected = "Petroleum"),
+                    
+                    # Frequency
+                        shiny::uiOutput("freq_ui")
                     ),
                 bslib::layout_columns(
                     bslib::card(
@@ -27,7 +33,16 @@ ui <- bslib::page_navbar(
                     col_widths = c(12,12),
                     row_heights = c(2,1)
                     ),
-                col_widths = c(5,7)
+                col_widths = c(3,9)
             )),
-        bslib::nav_panel(title = "Contact")
+        bslib::nav_panel(
+                title = "Contact and References",
+                bslib::layout_columns(
+                        bslib::card(bslib::card_header("Contact Details"),
+                                    "Details go here"),
+                        bslib::card(bslib::card_header("References"),
+                                    print("https://stackoverflow.com/questions/31454185/how-to-add-remove-input-fields-dynamically-by-a-button-in-shiny")),
+                        col_widths = c(6,6)
+                )
+                )
         )
