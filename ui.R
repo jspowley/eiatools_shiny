@@ -25,7 +25,12 @@ ui <- bslib::page_navbar(
                     ),
                 bslib::layout_columns(
                     bslib::card(
-                        bslib::card_header("Select Endpoints"),
+                        bslib::card_header(
+                          fluidRow(
+                            column(10, "Select Endpoints"),
+                            column(2, actionButton("transfer_btn", "Transfer Rows"))
+                          )
+                        ),
                         # DT selection from table goes here
                         DTOutput("displayed_table")
                         ),
