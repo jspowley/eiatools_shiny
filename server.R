@@ -64,7 +64,7 @@ server <- function(input, output) {
         selectInput(
           inputId = paste0("f_", f),
           label = paste0(stringr::str_to_title(f)),
-          choices = facet_dict[f]$desc,
+          choices = c(1,2,3),#facet_dict[f]$desc,
           selected = isolate(input[[paste0("f_", f)]]) # When filtering available facets, repopulates with the last selected.
         )
       })
