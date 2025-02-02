@@ -22,6 +22,12 @@ ui <- bslib::page_navbar(
                         shiny::uiOutput("freq_ui"),
                     # Facets
                         shiny::uiOutput("facet_ui"),
+                    # Update
+                        shiny::actionButton(inputId = "update",
+                                            label = "Search"),
+                    # Reset
+                        shiny::actionButton(inputId = "reset",
+                                        label = "Reset Query"),
                     # Demo Output
                         shiny::uiOutput("concat")
                     ),

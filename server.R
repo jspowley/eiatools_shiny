@@ -35,7 +35,7 @@ server <- function(input, output) {
     print("Rendered Frequency")
     r$table_id <- table_id
     r$table <- table_init
-    
+    r$table_render <- table_init
   })
   
   # Update Table Based On Frequency Dropdown
@@ -56,19 +56,21 @@ server <- function(input, output) {
     output$selected_endpoints <- renderDT(r$selected_endpoints)
   })
   
+  # Facet_Table Update Controller
+  # shiny::observeEvent(c(r$table_init, input$update),{
+  #  r$update_facets
+  # })
   
   # Facets
-  shiny::observeEvent(r$table, {
+  shiny::observeEvent(r$table_render, {
     
-    facets <- r$table %>% unique_facets()
-    facet_dict <- list()
-    
+    facets <- r$table_render %>% unique_facets()
     facet_dict <- list()
     
     for(f in facets){
       
       f_desc <- facet_desc_map %>% dplyr::filter(table == r$table_id & facet == f) %>% dplyr::pull(desc)
-      facet_dict[[f]] <- r$table %>% 
+      facet_dict[[f]] <- r$table_render %>% 
         dplyr::select(dplyr::any_of(c(f, f_desc))) %>%
         dplyr::distinct() %>% 
         dplyr::rename(id = !!sym(f), desc = !!sym(f_desc)) %>% 
@@ -115,15 +117,19 @@ server <- function(input, output) {
       # 1. Convert descriptions selected into the appropriate facet ids
         print("Filtering table")
         # print(str(facet_select[f][[1]]))
-        r$facet_dict[f][[1]] %>% 
+        id_vec <- r$facet_dict[f][[1]] %>% 
           dplyr::filter(desc %in% facet_select[f][[1]]) %>% 
           dplyr::pull(id) %>% 
-          unlist() %>% 
-          str() %>% print()
+          unlist()
       # 2. Filter and apply selection changes to the table image.
+        saveRDS(id_vec, "id_vec.rds")
+        if(length(id_vec) > 0){
+          print("Tabel Image Narrowed")
+          table_image <- table_image %>% dplyr::filter(!!sym(f) %in% id_vec)
+        }
     }
     # 3. Push the updated table image back into the global server environment, which will trigger a new facet selection screen.
-    r$table <- table_image
+    r$table_render <- table_image
     })
   })
 }
