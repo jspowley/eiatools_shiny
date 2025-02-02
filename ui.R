@@ -21,7 +21,9 @@ ui <- bslib::page_navbar(
                     # Frequency
                         shiny::uiOutput("freq_ui"),
                     # Facets
-                        shiny::uiOutput("facet_ui")
+                        shiny::uiOutput("facet_ui"),
+                    # Demo Output
+                        shiny::uiOutput("concat")
                     ),
                 bslib::layout_columns(
                     bslib::card(

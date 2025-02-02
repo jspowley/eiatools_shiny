@@ -61,14 +61,25 @@ server <- function(input, output) {
     choice_in <- facet_dict[["process"]]$desc
     
     output$facet_ui <- renderUI({
-      lapply(facets, function(f) {
+      lapply(facets, function(f) { #lapply handles the UI context better, based on a few stack overflow threads. Not my typical workflow but manages niche cases like this.
         selectizeInput(
           inputId = paste0("f_", f),
           label = paste0(stringr::str_to_title(f)),
           choices = (facet_dict[[f]] %>% dplyr::pull(desc)),
           selected = isolate(input[[paste0("f_", f)]]) # When filtering available facets, repopulates with the last selected.
+          # Isolate sinc this is only relevant to when we're adjusting our facets in response to a narrowed table.
         )
       })
     })
+    
+    r$facets <- facets
+    r$facet_dict <- facet_dict
+  })
+  
+  observe({
+    req(r$facets)
+    facet_select <- sapply(r$facets, function(f_name){input[[paste0("f_",f_name)]]}, simplify = FALSE)
+    output$concat <- renderText(paste(unlist(facet_select), collapse = ", "))
+    print(facet_select)
   })
 }
