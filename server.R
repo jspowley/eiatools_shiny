@@ -73,11 +73,15 @@ server <- function(input, output) {
         dplyr::group_by(desc) %>% 
         dplyr::summarise(id = list(unique(id)), .groups = "keep") %>% 
         dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
+      
+      if(nrow(facet_dict[[f]]) > 2000){
+        facet_dict[[f]] <- data.frame("id" = NA, "desc" = "Too Many Choices! Please Filter Using Other Categories")
+      }
     }
     
     # print("Proof of subset:")
     # print(facet_dict["process"][[1]]$desc)
-    choice_in <- facet_dict[["process"]]$desc
+    # choice_in <- facet_dict[["process"]]$desc
     
     output$facet_ui <- renderUI({
       lapply(facets, function(f) { #lapply handles the UI context better, based on a few stack overflow threads. Not my typical workflow but manages niche cases like this.
@@ -100,5 +104,7 @@ server <- function(input, output) {
     facet_select <- sapply(r$facets, function(f_name){input[[paste0("f_",f_name)]]}, simplify = FALSE)
     output$concat <- renderText(paste(unlist(facet_select), collapse = ", "))
     print(facet_select)
+    
+    
   })
 }
