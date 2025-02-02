@@ -22,6 +22,7 @@ server <- function(input, output) {
     print("Rendered DT")
     
     # Rendering the frequency options
+    # updates input$frequency
     freqs <- table_init %>% pull(freq) %>% unique()
     names(freqs) <- stringr::str_to_title(freqs)
     
@@ -32,8 +33,41 @@ server <- function(input, output) {
     })
     
     print("Rendered Frequency")
-    r$table <- table_init
     r$table_id <- table_id
+    r$table <- table_init
     
+  })
+  
+  # Facets
+  shiny::observeEvent(r$table, {
+    
+    facets <- r$table %>% unique_facets()
+    facet_dict <- list()
+    
+    facet_dict <- list()
+    for(f in facets){
+      f_desc <- facet_desc_map %>% dplyr::filter(table == r$table_id & facet == f) %>% dplyr::pull(desc)
+      facet_dict[[f]] <- r$table %>% 
+        dplyr::select(dplyr::any_of(c(f, f_desc))) %>%
+        dplyr::distinct() %>% 
+        dplyr::rename(id = !!sym(f), desc = !!sym(f_desc)) %>% 
+        dplyr::group_by(desc) %>% 
+        dplyr::summarise(id = list(unique(id)), .groups = "keep") %>% 
+        dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
+    }
+    
+    # print("Proof of subset:")
+    # print(facet_dict["process"][[1]]$desc)
+    
+    output$facet_ui <- renderUI({
+      lapply(facets, function(f) {
+        selectInput(
+          inputId = paste0("f_", f),
+          label = paste0(stringr::str_to_title(f)),
+          choices = facet_dict[f]$desc,
+          selected = isolate(input[[paste0("f_", f)]]) # When filtering available facets, repopulates with the last selected.
+        )
+      })
+    })
   })
 }
