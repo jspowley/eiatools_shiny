@@ -58,13 +58,14 @@ server <- function(input, output) {
     
     # print("Proof of subset:")
     # print(facet_dict["process"][[1]]$desc)
+    choice_in <- facet_dict[["process"]]$desc
     
     output$facet_ui <- renderUI({
       lapply(facets, function(f) {
-        selectInput(
+        selectizeInput(
           inputId = paste0("f_", f),
           label = paste0(stringr::str_to_title(f)),
-          choices = c(1,2,3),#facet_dict[f]$desc,
+          choices = (facet_dict[[f]] %>% dplyr::pull(desc)),
           selected = isolate(input[[paste0("f_", f)]]) # When filtering available facets, repopulates with the last selected.
         )
       })
