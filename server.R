@@ -74,7 +74,7 @@ server <- function(input, output) {
         dplyr::summarise(id = list(unique(id)), .groups = "keep") %>% 
         dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
       
-      if(nrow(facet_dict[[f]]) > 2000){
+      if(nrow(facet_dict[[f]]) > 2000 & length(facets) > 1){
         facet_dict[[f]] <- data.frame("id" = NA, "desc" = "Too Many Choices! Please Filter Using Other Categories")
       }
     }
