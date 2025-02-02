@@ -38,6 +38,25 @@ server <- function(input, output) {
     
   })
   
+  # Update Table Based On Frequency Dropdown
+  shiny::observeEvent(input$frequency, {
+    if (!is.null(r$table) && !is.null(input$frequency)) {
+      filtered_table <- r$table %>% dplyr::filter(freq == input$frequency)
+      output$displayed_table <- renderDT(filtered_table)
+    }
+  })
+  
+  
+  # Transfer Rows
+  shiny::observeEvent(input$transfer_btn, {
+    selected_rows <- input$displayed_table_rows_selected
+    r$selected_endpoints <- r$table[selected_rows, ]
+    
+    # Display the selected rows in the "Endpoints Selected" card
+    output$selected_endpoints <- renderDT(r$selected_endpoints)
+  })
+  
+  
   # Facets
   shiny::observeEvent(r$table, {
     

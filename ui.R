@@ -27,12 +27,18 @@ ui <- bslib::page_navbar(
                     ),
                 bslib::layout_columns(
                     bslib::card(
-                        bslib::card_header("Select Endpoints"),
+                        bslib::card_header(
+                          fluidRow(
+                            column(10, "Select Endpoints"),
+                            column(2, actionButton("transfer_btn", "Transfer Rows"))
+                          )
+                        ),
                         # DT selection from table goes here
                         DTOutput("displayed_table")
                         ),
                     bslib::card(bslib::card_header("Endpoints Selected"),
-                        # Display of currently selected endpoints go here        
+                        # Display of currently selected endpoints go here
+                        DTOutput("selected_endpoints")
                         ),
                     col_widths = c(12,12),
                     row_heights = c(2,1)
