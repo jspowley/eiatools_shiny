@@ -38,6 +38,16 @@ server <- function(input, output) {
     
   })
   
+  # Transfer Rows
+  shiny::observeEvent(input$transfer_btn, {
+    selected_rows <- input$displayed_table_rows_selected
+    r$selected_endpoints <- r$table[selected_rows, ]
+    
+    # Display the selected rows in the "Endpoints Selected" card
+    output$selected_endpoints <- renderDT(r$selected_endpoints)
+  })
+  
+  
   # Facets
   shiny::observeEvent(r$table, {
     

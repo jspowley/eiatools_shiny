@@ -35,7 +35,8 @@ ui <- bslib::page_navbar(
                         DTOutput("displayed_table")
                         ),
                     bslib::card(bslib::card_header("Endpoints Selected"),
-                        # Display of currently selected endpoints go here        
+                        # Display of currently selected endpoints go here
+                        DTOutput("selected_endpoints")
                         ),
                     col_widths = c(12,12),
                     row_heights = c(2,1)
