@@ -23,11 +23,13 @@ server <- function(input, output) {
     names(freqs) <- stringr::str_to_title(freqs)
     freqs <- append(list("(None)" = NA), freqs)
     
+    
     output$freq_ui <- shiny::renderUI({
       shiny::selectizeInput(inputId = "frequency",
                          label = "Frequency:",
                          choices = freqs)
     })
+    r$freq_init <- TRUE
     
     # print(str(table_init))
     
@@ -36,9 +38,9 @@ server <- function(input, output) {
     
     r$table_id <- table_id
     r$table <- table_init
-    r$table_render <- table_init
+    r$table_init <- table_init
     
-    facets <- r$table_render %>% unique_facets()
+    facets <- r$table %>% unique_facets()
     facet_dict <- list()
     
     for(f in facets){
@@ -76,19 +78,32 @@ server <- function(input, output) {
   
   # Frequency Updates Apply Automatically, and Immediately Affect Facets. 
   # This is due to timeframe signifnciantly affecting what information is reported.
-  
-  
-  # Facet UI Render Updates. This does not control facet selection options!!!
-  shiny::observeEvent(r$facet_dict, {
-    facets <- r$facets
-    facet_dict <- r$facet_dict
-    # print("Proof of subset:")
-    # print(facet_dict["process"][[1]]$desc)
-    # choice_in <- facet_dict[["process"]]$desc
+  observeEvent(input$frequency, {
+    if(!r$freq_init){
+      print("Frequemcy Updates")
+      r$table <- r$table_init %>% dplyr::filter(freq == input$frequency)
+      if(is.null(r$facet_update)){
+        r$facet_update <- 1
+      }else{
+        r$facet_update <- r$facet_update + 1
+      }
+    }else{
+      r$freq_init <- FALSE
+    }
   })
   
   observeEvent(input$update, {
+    print("Update Update")
+    if(is.null(r$update)){
+      r$update <- 1
+    }else{
+      r$update <- r$update + 1
+    }
+  })
+  
+  observeEvent(c(r$update, r$facet_update), {
     
+    print("Facet Updating")
     req(r$facets) # Ensures we don't trigger because of "inputs" prematurely.
     facet_select <- sapply(r$facets, function(f_name){input[[paste0("f_",f_name)]]}, simplify = FALSE)
     output$concat <- renderText(paste(unlist(facet_select), collapse = ", "))
@@ -149,6 +164,7 @@ server <- function(input, output) {
       }
     }
     
+    # Push updates to UI, narrowing facet options to only those relevant to the current search
     output$facet_ui <- renderUI({
       lapply(r$facets, function(f) { #lapply handles the UI context better, based on a few stack overflow threads. Not my typical workflow but manages niche cases like this.
         selectizeInput(
@@ -162,6 +178,18 @@ server <- function(input, output) {
       })
     })
     })
+    
+    # Rendering changes to DT
+    output_dt <- r$table
+    for(f in r$facets){
+      # print(f)
+      target_vec <- r$facet_dict[[f]] %>% dplyr::pull(id) %>% unlist()
+      # print(target_vec)
+      output_dt <- output_dt %>% 
+        dplyr::filter(!!sym(f) %in% target_vec)
+    }
+    # print(output_dt)
+    output$displayed_table <- renderDT(output_dt)
   })
   
   # Transfer Rows
