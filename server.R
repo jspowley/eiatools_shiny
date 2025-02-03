@@ -2,7 +2,7 @@
 server <- function(input, output) {
   
   bslib::toggle_dark_mode()
-  bslib::bs_themer()
+  # bslib::bs_themer()
   
   output$displayed_table <- renderDT(eiatools::data_index[(eiatools::data_index %>% names()) == "petroleum"] %>% .[[1]])
   r <- shiny::reactiveValues()
@@ -21,7 +21,7 @@ server <- function(input, output) {
     # updates to input$frequency
     freqs <- table_init %>% pull(freq) %>% unique()
     names(freqs) <- stringr::str_to_title(freqs)
-    freqs <- append(list("(None)" = NA), freqs)
+    freqs <- append(list("(All)" = NA), freqs)
     
     
     output$freq_ui <- shiny::renderUI({
@@ -41,6 +41,9 @@ server <- function(input, output) {
     r$table_init <- table_init
     
     facets <- r$table %>% unique_facets()
+    mapped_facets <- facet_desc_map %>% dplyr::filter(table == table_id) %>% dplyr::pull(facet)
+    
+    facets <- facets[facets %in% mapped_facets]
     facet_dict <- list()
     
     for(f in facets){
