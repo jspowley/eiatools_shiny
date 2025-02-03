@@ -80,8 +80,15 @@ server <- function(input, output) {
   # This is due to timeframe signifnciantly affecting what information is reported.
   observeEvent(input$frequency, {
     if(!r$freq_init){
-      print("Frequemcy Updates")
-      r$table <- r$table_init %>% dplyr::filter(freq == input$frequency)
+      print("Frequency Updates")
+      print(str(input$frequency))
+      if(!input$frequency == "NA"){
+        print("Freq Supplied")
+        r$table <- r$table_init %>% dplyr::filter(freq == input$frequency)
+      }else{
+        print("Freq Reset")
+        r$table <- r$table_init
+      }
       if(is.null(r$facet_update)){
         r$facet_update <- 1
       }else{
@@ -182,11 +189,13 @@ server <- function(input, output) {
     # Rendering changes to DT
     output_dt <- r$table
     for(f in r$facets){
-      # print(f)
+      print(f)
       target_vec <- r$facet_dict[[f]] %>% dplyr::pull(id) %>% unlist()
-      # print(target_vec)
+      print(target_vec)
+      if(length(target_vec) > 0){
       output_dt <- output_dt %>% 
         dplyr::filter(!!sym(f) %in% target_vec)
+      }
     }
     # print(output_dt)
     output$displayed_table <- renderDT(output_dt)
