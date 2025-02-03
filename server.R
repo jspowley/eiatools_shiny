@@ -50,9 +50,8 @@ server <- function(input, output) {
       
       f_desc <- facet_desc_map %>% dplyr::filter(table == r$table_id & facet == f) %>% dplyr::pull(desc)
       facet_dict[[f]] <- table_init %>% 
-        dplyr::select(dplyr::any_of(c(f, f_desc))) %>%
+        dplyr::transmute(id = !!sym(f), desc = !!sym(f_desc)) %>% 
         dplyr::distinct() %>% 
-        dplyr::rename(id = !!sym(f), desc = !!sym(f_desc)) %>% 
         dplyr::group_by(desc) %>% 
         dplyr::summarise(id = list(unique(id)), .groups = "keep") %>% 
         dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
