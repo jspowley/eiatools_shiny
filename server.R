@@ -190,9 +190,11 @@ server <- function(input, output) {
     output_dt <- r$table
     for(f in r$facets){
       print(f)
-      target_vec <- r$facet_dict[[f]] %>% dplyr::pull(id) %>% unlist()
-      print(target_vec)
+      target_vec <- r$facet_dict[f][[1]] %>% dplyr::filter(desc %in% facet_select[[f]]) %>% pull(id) %>% unlist()
+      print(str(target_vec))
+      
       if(length(target_vec) > 0){
+        print(paste0("Filtering DT on ", f))
       output_dt <- output_dt %>% 
         dplyr::filter(!!sym(f) %in% target_vec)
       }
