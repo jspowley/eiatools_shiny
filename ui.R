@@ -40,7 +40,7 @@ ui <- bslib::page_navbar(
                           )
                         ),
                         # DT selection from table goes here
-                        DTOutput("displayed_table")
+                        DTOutput("displayed_table", fill = FALSE)
                         ),
                     bslib::card(bslib::card_header("Endpoints Selected"),
                         # Display of currently selected endpoints go here
