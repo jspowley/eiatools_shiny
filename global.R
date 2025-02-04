@@ -13,6 +13,11 @@ unique_facets <- function(data_index_table){
 # manually mapping is required. Fortunately we only need to maintain about 1-30 columns per table, which isn't ideal, 
 # but certainly isn't into the range of "tasks which are too big for humans"
 
+# For a good example of proof manual mapping is 100% required, see eiatools::data_index$coal...
+# We have id's mapped to descriptions, id's without descriptions which require 
+# they are mapped to themselves, and descriptions and id's which aren't adjacent 
+# within the table.
+
 facet_desc_map <- tibble::tribble(
   ~table, ~facet, ~desc,
   

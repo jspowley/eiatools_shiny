@@ -4,8 +4,8 @@ server <- function(input, output) {
   bslib::toggle_dark_mode()
   # bslib::bs_themer()
   
-  output$displayed_table <- renderDT(eiatools::data_index[(eiatools::data_index %>% names()) == "petroleum"] %>% .[[1]])
   r <- shiny::reactiveValues()
+  r$displayed_table <- eiatools::data_index[(eiatools::data_index %>% names()) == "petroleum"] %>% .[[1]]
   
   input_chain <- reactive({x <- reactiveValuesToList(input)})
   
@@ -15,7 +15,7 @@ server <- function(input, output) {
     # Using the descriptive name, find the table id associated to the API. Then query the selected table for display
     table_id <- eiatools::app_dictionary$tables %>% dplyr::filter(route_1_name == input$table_select) %>% dplyr::pull(route_1_id)
     table_init <- eiatools::data_index[(eiatools::data_index %>% names()) == table_id] %>% .[[1]]
-    output$displayed_table <- renderDT(table_init)
+    r$displayed_table <- table_init
     
     # Rendering the frequency options
     # updates to input$frequency
@@ -122,7 +122,6 @@ server <- function(input, output) {
   observeEvent(c(r$update, r$facet_update), {
     
     print("Facet Updating")
-    req(r$facets) # Ensures we don't trigger because of "inputs" prematurely.
     facet_select <- sapply(r$facets, function(f_name){input[[paste0("f_",f_name)]]}, simplify = FALSE)
     output$concat <- renderText(paste(unlist(facet_select), collapse = ", "))
     
@@ -130,9 +129,10 @@ server <- function(input, output) {
     
     # print(str(facet_select))
     # Creating a temporary image here prevents updating prematurely before applying all filters...
-    shiny::isolate({
     table_image <- r$table
     for(f_target in r$facets){
+      
+      print(f_target)
       
       other_facets <- r$facets
       other_facets <- other_facets[!other_facets %in% f_target]
@@ -182,7 +182,8 @@ server <- function(input, output) {
         r$facet_dict[[f_target]] <- dict_out
       }
     }
-    
+    print("exiting for loop")
+    print("UI Push for Facets")
     # Push updates to UI, narrowing facet options to only those relevant to the current search
     output$facet_ui <- renderUI({
       lapply(r$facets, function(f) { #lapply handles the UI context better, based on a few stack overflow threads. Not my typical workflow but manages niche cases like this.
@@ -196,9 +197,9 @@ server <- function(input, output) {
         )
       })
     })
-    })
     
     # Rendering changes to DT
+    print("Applying Changes to DT")
     output_dt <- r$table
     for(f in r$facets){
       print(f)
@@ -212,18 +213,27 @@ server <- function(input, output) {
       }
     }
     # print(output_dt)
-    output$displayed_table <- renderDT(output_dt)
+    r$displayed_table <- output_dt
   })
   
   # Transfer Rows
   shiny::observeEvent(input$transfer_btn, {
     selected_rows <- input$displayed_table_rows_selected
-    r$selected_endpoints <- r$table[selected_rows, ]
+    selected_endpoints <- r$displayed_table[selected_rows, ]
     
+    if(is.null(r$all_selected)){
+      r$all_selected <- selected_endpoints
+    }else{
+      r$all_selected <- dplyr::bind_rows(all_selected, selected_endpoints)
+    }
     # Display the selected rows in the "Endpoints Selected" card
-    output$selected_endpoints <- renderDT(r$selected_endpoints)
+    output$selected_endpoints <- renderDT(r$all_selected)
   })
   
+  shiny::observeEvent(r$displayed_table, {
+    print("Rendering DT")
+    output$displayed_table <- DT::renderDT(r$displayed_table)
+  })
   # Update Table Based On Frequency Dropdown
   #shiny::observeEvent(input$frequency, {
   #  if (!is.null(r$table) && !is.null(input$frequency)) {
