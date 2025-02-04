@@ -237,7 +237,7 @@ server <- function(input, output) {
       DT::datatable(
         r$displayed_table # https://rstudio.github.io/DT/002-rowdetails.html
       ) %>% 
-        DT::formatStyle(.,names(r$displayed_table), lineHeight = '80%'))
+        DT::formatStyle(.,names(r$displayed_table), lineHeight = '100%'))
   })
   
   shiny::observeEvent(input$reset, {
