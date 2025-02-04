@@ -49,12 +49,25 @@ server <- function(input, output) {
     for(f in facets){
       
       f_desc <- facet_desc_map %>% dplyr::filter(table == r$table_id & facet == f) %>% dplyr::pull(desc)
-      facet_dict[[f]] <- table_init %>% 
-        dplyr::transmute(id = !!sym(f), desc = !!sym(f_desc)) %>% 
-        dplyr::distinct() %>% 
-        dplyr::group_by(desc) %>% 
-        dplyr::summarise(id = list(unique(id)), .groups = "keep") %>% 
-        dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
+      
+      if(f_desc == f){
+        print("id==desc")
+        facet_dict[[f]] <- table_init %>% 
+          dplyr::transmute(id = !!sym(f), desc = !!sym(f_desc)) %>% 
+          dplyr::distinct() %>% 
+          dplyr::rowwise() %>% 
+          dplyr::mutate(id = list(id), .groups = "keep") %>% 
+          dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
+      }else{
+        print("id!=desc")
+        facet_dict[[f]] <- table_init %>% 
+          dplyr::transmute(id = !!sym(f), desc = !!sym(f_desc)) %>% 
+          dplyr::distinct() %>% 
+          dplyr::group_by(desc) %>% 
+          dplyr::summarise(id = list(unique(id)), .groups = "keep") %>% 
+          dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
+      }
+      print("EXITING")
       
       if(nrow(facet_dict[[f]]) > 2000 & length(facets) > 1){
         facet_dict[[f]] <- data.frame("id" = NA, "desc" = "Too Many Choices! Please Filter Using Other Categories")
@@ -81,7 +94,6 @@ server <- function(input, output) {
   # Frequency Updates Apply Automatically, and Immediately Affect Facets. 
   # This is due to timeframe signifnciantly affecting what information is reported.
   observeEvent(input$frequency, {
-    if(!r$freq_init){
       print("Frequency Updates")
       print(str(input$frequency))
       if(!input$frequency == "NA"){
@@ -96,9 +108,6 @@ server <- function(input, output) {
       }else{
         r$facet_update <- r$facet_update + 1
       }
-    }else{
-      r$freq_init <- FALSE
-    }
   })
   
   observeEvent(input$update, {
@@ -150,10 +159,11 @@ server <- function(input, output) {
       
       # B) Narrowed space must now be converted back to selection options (descriptive version) applied to the target facet:
       f_desc <- facet_desc_map %>% dplyr::filter(table == r$table_id & facet == f_target) %>% dplyr::pull(desc)
+      
+      
       dict_out <- table_image %>% 
-        dplyr::select(dplyr::any_of(c(f_target, f_desc))) %>%
+        dplyr::transmute(id = !!sym(f_target), desc = !!sym(f_desc)) %>%
         dplyr::distinct() %>% 
-        dplyr::rename(id = !!sym(f_target), desc = !!sym(f_desc)) %>% 
         dplyr::group_by(desc) %>% 
         dplyr::summarise(id = list(unique(id)), .groups = "keep") %>% 
         dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
