@@ -224,7 +224,8 @@ server <- function(input, output) {
     if(is.null(r$all_selected)){
       r$all_selected <- selected_endpoints
     }else{
-      r$all_selected <- dplyr::bind_rows(all_selected, selected_endpoints)
+      r$all_selected <- dplyr::bind_rows(all_selected, selected_endpoints) %>% 
+        dplyr::distinct()
     }
     # Display the selected rows in the "Endpoints Selected" card
     output$selected_endpoints <- renderDT(r$all_selected)
