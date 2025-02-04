@@ -123,7 +123,15 @@ server <- function(input, output) {
     
     print("Facet Updating")
     facet_select <- sapply(r$facets, function(f_name){input[[paste0("f_",f_name)]]}, simplify = FALSE)
-    output$concat <- renderText(paste(unlist(facet_select), collapse = ", "))
+    print(is.null(input$frequency))
+    print(is.na(input$frequency))
+    print(is.character(input$frequency))
+    print(input$frequency)
+    output$concat <- renderText(
+      paste0(
+      "Search: ", r$table_id, ", ",
+      ifelse(input$frequency == "NA", "", paste0(input$frequency, ", ")),
+      paste(unlist(facet_select), collapse = ", ")))
     
     # print("SELECTION MADE!!!")
     
@@ -244,7 +252,7 @@ server <- function(input, output) {
     for(f in r$facets){
       shiny::updateSelectizeInput(inputId = paste0("f_",f), selected = NA)
     }
-    # shiny::updateSelectizeInput(inputId = "frequency", selected = NA)
+    shiny::updateSelectizeInput(inputId = "frequency", selected = "NA")
   })
   # Update Table Based On Frequency Dropdown
   #shiny::observeEvent(input$frequency, {
