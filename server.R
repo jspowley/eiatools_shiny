@@ -56,16 +56,16 @@ server <- function(input, output) {
           dplyr::transmute(id = !!sym(f), desc = !!sym(f_desc)) %>% 
           dplyr::distinct() %>% 
           dplyr::rowwise() %>% 
-          dplyr::mutate(id = list(id), .groups = "keep") %>% 
-          dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
+          dplyr::mutate(id = list(id), .groups = "keep") # %>% 
+          # dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
       }else{
         print("id!=desc")
         facet_dict[[f]] <- table_init %>% 
           dplyr::transmute(id = !!sym(f), desc = !!sym(f_desc)) %>% 
           dplyr::distinct() %>% 
           dplyr::group_by(desc) %>% 
-          dplyr::summarise(id = list(unique(id)), .groups = "keep") %>% 
-          dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
+          dplyr::summarise(id = list(unique(id)), .groups = "keep") # %>% 
+          # dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
       }
       print("EXITING")
       
@@ -234,6 +234,13 @@ server <- function(input, output) {
   shiny::observeEvent(r$displayed_table, {
     print("Rendering DT")
     output$displayed_table <- DT::renderDT(r$displayed_table)
+  })
+  
+  shiny::observeEvent(input$reset, {
+    for(f in r$facets){
+      shiny::updateSelectizeInput(inputId = paste0("f_",f), selected = NA)
+    }
+    # shiny::updateSelectizeInput(inputId = "frequency", selected = NA)
   })
   # Update Table Based On Frequency Dropdown
   #shiny::observeEvent(input$frequency, {
