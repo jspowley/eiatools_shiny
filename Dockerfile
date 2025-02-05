@@ -6,8 +6,9 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev
 
 RUN R -e "install.packages(c('shiny', 'bslib', 'tidyverse', 'eiatools', 'DT', 'rlang', 'rhandsontable'), dependencies = TRUE, repos = 'https://packagemanager.rstudio.com/cran/latest')"
+RUN git clone https://github.com/jspowley/eiatools_shiny.git /srv/shiny-server/shiny-stocks
 
-RUN [ ! -d /home/rstudio ] || mkdir /home/rstudio
+RUN echo "rstudio:rstudio" | chpasswd
 RUN chown rstudio:rstudio /home/rstudio
 
 EXPOSE 8787
