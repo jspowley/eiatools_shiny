@@ -237,7 +237,11 @@ server <- function(input, output) {
         dplyr::distinct()
     }
     # Display the selected rows in the "Endpoints Selected" card
-    output$selected_endpoints <- renderDT(r$all_selected)
+    # output$selected_endpoints <- renderDT(r$all_selected, editable = list(target = "cell", columns = 1))
+    output$selected_endpoints <- renderRHandsontable({
+      rhandsontable(r$all_selected, readOnly = TRUE) %>% 
+      hot_col("nickname", readOnly = FALSE, type = "text")  # Only columnA editable
+    })
   })
   
   shiny::observeEvent(r$displayed_table, {
@@ -249,7 +253,7 @@ server <- function(input, output) {
     
     output$displayed_table <- DT::renderDT(
       DT::datatable(
-        r$displayed_table # https://rstudio.github.io/DT/002-rowdetails.html
+        r$displayed_table, # https://rstudio.github.io/DT/002-rowdetails.html
       ) %>% 
         DT::formatStyle(.,names(r$displayed_table), lineHeight = '100%'))
   })
