@@ -234,7 +234,7 @@ server <- function(input, output) {
       r$all_selected <- selected_endpoints
     }else{
       r$all_selected <- dplyr::bind_rows(r$all_selected, selected_endpoints) %>% 
-        dplyr::distinct()
+        dplyr::distinct(-nickname)
     }
     # Display the selected rows in the "Endpoints Selected" card
     # output$selected_endpoints <- renderDT(r$all_selected, editable = list(target = "cell", columns = 1))
@@ -263,6 +263,11 @@ server <- function(input, output) {
       shiny::updateSelectizeInput(inputId = paste0("f_",f), selected = NA)
     }
     shiny::updateSelectizeInput(inputId = "frequency", selected = "NA")
+  })
+  
+  shiny::observeEvent(input$selected_endpoints, {
+    print("editted rows!")
+    # input$selected_endpoints$data %>% str() %>% print()
   })
   # Update Table Based On Frequency Dropdown
   #shiny::observeEvent(input$frequency, {
