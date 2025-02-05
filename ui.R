@@ -49,9 +49,13 @@ ui <- bslib::page_navbar(
                         DTOutput("selected_endpoints"),
                         full_screen = TRUE
                         ),
-                    bslib::card(bslib::card_header("Export")
-                                # Display of currently selected endpoints go here
-                    ),
+                    bslib::card(bslib::card_header("Export"),
+                        shiny::textInput("file_name", "File Name:"),
+                        layout_columns(
+                      shiny::actionButton("download_rds", "Download Endpoints"),
+                      shiny::actionButton("transfer_endpoints", "Transfer to Export Manager"),# Display of currently selected endpoints go here
+                        col_widths = c(6,6)
+                      )),
                     col_widths = c(12,9,3),
                     row_heights = c(2,1)
                     ),

@@ -227,12 +227,13 @@ server <- function(input, output) {
   # Transfer Rows
   shiny::observeEvent(input$transfer_btn, {
     selected_rows <- input$displayed_table_rows_selected
-    selected_endpoints <- r$displayed_table[selected_rows, ]
+    selected_endpoints <- r$displayed_table[selected_rows, ] %>% 
+      dplyr::select(nickname, dplyr::everything())
     
     if(is.null(r$all_selected)){
       r$all_selected <- selected_endpoints
     }else{
-      r$all_selected <- dplyr::bind_rows(all_selected, selected_endpoints) %>% 
+      r$all_selected <- dplyr::bind_rows(r$all_selected, selected_endpoints) %>% 
         dplyr::distinct()
     }
     # Display the selected rows in the "Endpoints Selected" card
