@@ -241,6 +241,11 @@ server <- function(input, output) {
   
   shiny::observeEvent(r$displayed_table, {
     print("Rendering DT")
+    
+    output$search_nrow <- renderText(
+      paste0("Found ",nrow(r$displayed_table)," results.")
+    )
+    
     output$displayed_table <- DT::renderDT(
       DT::datatable(
         r$displayed_table # https://rstudio.github.io/DT/002-rowdetails.html

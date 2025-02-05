@@ -29,7 +29,8 @@ ui <- bslib::page_navbar(
                         shiny::actionButton(inputId = "reset",
                                         label = "Reset Query"),
                     # Demo Output
-                        shiny::uiOutput("concat")
+                        shiny::uiOutput("concat"),
+                        shiny::uiOutput("search_nrow")
                     ),
                 bslib::layout_columns(
                     bslib::card(
@@ -40,13 +41,18 @@ ui <- bslib::page_navbar(
                           )
                         ),
                         # DT selection from table goes here
-                        DTOutput("displayed_table", fill = FALSE)
+                        DTOutput("displayed_table", fill = FALSE),
+                        full_screen = TRUE
                         ),
                     bslib::card(bslib::card_header("Endpoints Selected"),
                         # Display of currently selected endpoints go here
-                        DTOutput("selected_endpoints")
+                        DTOutput("selected_endpoints"),
+                        full_screen = TRUE
                         ),
-                    col_widths = c(12,12),
+                    bslib::card(bslib::card_header("Export")
+                                # Display of currently selected endpoints go here
+                    ),
+                    col_widths = c(12,9,3),
                     row_heights = c(2,1)
                     ),
                 col_widths = c(3,9)
