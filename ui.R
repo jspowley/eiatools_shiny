@@ -76,6 +76,17 @@ ui <- bslib::page_navbar(
                     ),
                 col_widths = c(3,9)
             )),
+        
+        bslib::nav_panel(
+          title = "Visualization",
+          bslib::layout_columns(
+            bslib::card(bslib::card_header("Inputs"),
+                        shiny::textInput("api_key", "API Key"),
+                        shiny::actionButton("api_submit", "Submit API Key")
+            ),
+          col_widths = c(3,9))
+        ),
+        
         bslib::nav_panel(
                 title = "Contacts",
                 bslib::layout_columns(
