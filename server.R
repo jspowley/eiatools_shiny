@@ -244,9 +244,12 @@ server <- function(input, output) {
     # output$selected_endpoints <- renderDT(r$all_selected, editable = list(target = "cell", columns = 1))
     col_cap <- length(colnames(r$all_selected))
     
+    # https://stackoverflow.com/questions/63906004/shiny-dt-datatable-make-only-certain-columns-editable-by-the-user
+    # https://rstudio.github.io/DT/options.html
     output$selected_endpoints <- renderDT(r$all_selected,
                                           editable = list(target = "cell", 
-                                          disable = list(columns = c(2:col_cap))))
+                                          disable = list(columns = c(2:col_cap))),
+                                          options = list(dom = "t"))
   })
   
   shiny::observeEvent(r$displayed_table, {
@@ -270,9 +273,14 @@ server <- function(input, output) {
     shiny::updateSelectizeInput(inputId = "frequency", selected = "NA")
   })
   
-  shiny::observeEvent(input$selected_endpoints, {
-    print("editted rows!")
-    # input$selected_endpoints$data %>% str() %>% print()
+  # Function for updating nicknames
+  shiny::observeEvent(input$selected_endpoints_cell_edit,{
+    print("cells editted")
+    print(str(input$selected_endpoints_cell_edit))
+    r_ind <- input$selected_endpoints_cell_edit$row
+    n_name <- input$selected_endpoints_cell_edit$value
+    r$all_selected$nickname[[r_ind]] <- n_name
+    print(r$all_selected)
   })
   # Update Table Based On Frequency Dropdown
   #shiny::observeEvent(input$frequency, {

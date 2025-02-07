@@ -51,6 +51,7 @@ ui <- bslib::page_navbar(
                         # https://cran.r-project.org/web/packages/rhandsontable/vignettes/intro_rhandsontable.html
                         
                         DT::DTOutput("selected_endpoints"),
+                        full_screen = TRUE
                     ),
                     bslib::card(bslib::card_header("Export"),
                         shiny::textInput("file_name", "File Name:"),
