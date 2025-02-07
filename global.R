@@ -77,7 +77,7 @@ facet_desc_map <- tibble::tribble(
   "electricity", "type", "type-name", 
   "electricity", "fueltype", "type-name", 
   "electricity", "fuel2002", "fuelTypeDescription", 
-  "electricity", "", "", 
+  "electricity", "fuelid", "fuelDescription", 
   "electricity", "", "", 
   "electricity", "", "", 
   "electricity", "", "", 
