@@ -249,7 +249,8 @@ server <- function(input, output) {
     output$selected_endpoints <- renderDT(r$all_selected,
                                           editable = list(target = "cell", 
                                           disable = list(columns = c(2:col_cap))),
-                                          options = list(dom = "t"))
+                                          options = list(dom = "t",
+                                                         ordering = FALSE))
   })
   
   shiny::observeEvent(r$displayed_table, {
