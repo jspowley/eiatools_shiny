@@ -44,7 +44,13 @@ ui <- bslib::page_navbar(
                         DTOutput("displayed_table", fill = FALSE),
                         full_screen = TRUE
                         ),
-                    bslib::card(bslib::card_header("Endpoints Selected"),
+                    bslib::card(bslib::card_header(
+                        fluidRow(
+                           column(8, "Ednpoints Selected"),
+                           column(2, actionButton("remove_btn", "Remove Rows")),
+                           column(2, actionButton("clear_btn", "Clear Selected"))
+                        )
+                    ),
                         # Display of currently selected endpoints go here
                         
                         # https://jsfiddle.net/0am85ght/
