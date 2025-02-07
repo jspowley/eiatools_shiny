@@ -300,6 +300,13 @@ server <- function(input, output) {
                                           options = list(dom = "t",
                                                          ordering = FALSE))
   })
+  
+  shiny::observeEvent(input$clear_btn, {
+    r$all_selected <- data.frame()
+    output$selected_endpoints <- renderDT(r$all_selected,
+                                          options = list(dom = "t",
+                                                         ordering = FALSE))
+  })
   # Update Table Based On Frequency Dropdown
   #shiny::observeEvent(input$frequency, {
   #  if (!is.null(r$table) && !is.null(input$frequency)) {
