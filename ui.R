@@ -98,10 +98,15 @@ ui <- bslib::page_navbar(
                         shiny::p("Selecting endpoints is completed in the 'Select Endpoints' table. Users can left click on a row to select that rows
                                  endpoint. Selection is made when the row is highlighted. Users can further sort each column, or search the full table
                                  using the search function in the top-right corner. Users can choose the number of entries that display in the table at
-                                 any time, however please note that showing more entries may slow your device."),
+                                 any time, however please note that showing more entries may slow your device. Users can hold shift to select multiple rows at once. 
+                                 To do so, click the first row and hold shift; then scroll to the last row you want to select, and click this row. All rows
+                                 in between, will be selected."),
                         shiny::h5("Transfering Rows For Export"),
-                        shiny::p("Once the user selects rows, they must click the 'Transfer Rows'"),
-          )
+                        shiny::p("Once the user selects rows, they must click the 'Transfer Rows' button in the top-right corner. This will move selected rows
+                                 into the export ready 'Endpoints Selected' table. Users can remove these endpoints selecting the rows they want to remove,
+                                 and clicking 'Remove Rows'. For ease, users can also clear all rows by selecting 'Clear'."),
+          ),
+          bslib::card(bslib::card_header("EIA Documentation"))
         )
         )
 )
