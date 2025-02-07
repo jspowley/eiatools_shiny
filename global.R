@@ -5,6 +5,8 @@ library(eiatools)
 library(DT)
 library(rlang)
 library(rhandsontable)
+library(htmltools)
+library(rvest)
 
 unique_facets <- function(data_index_table){
   data_index_table %>% pull(facets) %>% unlist() %>% unique()
@@ -91,3 +93,14 @@ facet_desc_map <- tibble::tribble(
   "electricity", "", "", 
   
 )
+
+eia_docs <- function(){
+  url <- "https://www.eia.gov/opendata/documentation.php"
+  page <- rvest::read_html(url)
+  content <- rvest::html_nodes(page, "body")
+  html_content <- as.character(content)
+  
+  return(html_content)
+}
+
+

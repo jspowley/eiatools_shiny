@@ -113,7 +113,8 @@ ui <- bslib::page_navbar(
                         shiny::p(shiny::HTML("<em>EIATools is under continuous development, and your feedback is important. If you encounter any errors or have a feature request, do not hesitate 
                                              to get in contact with our team.</em>"))
           ),
-          bslib::card(bslib::card_header("EIA Documentation"))
+          bslib::card(bslib::card_header("EIA Documentation")
+                      )
         )
         )
 )
