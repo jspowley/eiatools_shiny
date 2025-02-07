@@ -74,6 +74,7 @@ server <- function(input, output) {
       }
     }
     
+    # https://stackoverflow.com/questions/31454185/how-to-add-remove-input-fields-dynamically-by-a-button-in-shiny
     output$facet_ui <- renderUI({
       lapply(facets, function(f) { #lapply handles the UI context better, based on a few stack overflow threads. Not my typical workflow but manages niche cases like this.
         selectizeInput(
@@ -307,6 +308,14 @@ server <- function(input, output) {
                                           options = list(dom = "t",
                                                          ordering = FALSE))
   })
+  
+  # https://www.rdocumentation.org/packages/shiny/versions/1.10.0/topics/downloadHandler
+  output$download_rds <- shiny::downloadHandler(
+    filename = function(){paste0(input$file_name,".rds")},
+    content = function(f_in){
+      saveRDS(r$all_selected, f_in)
+    }
+  )
   # Update Table Based On Frequency Dropdown
   #shiny::observeEvent(input$frequency, {
   #  if (!is.null(r$table) && !is.null(input$frequency)) {
