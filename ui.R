@@ -86,25 +86,32 @@ ui <- bslib::page_navbar(
           bslib::layout_columns(
             bslib::card(bslib::card_header("App Documentation"),
                         shiny::h5("About EIATools"),
-                        shiny::p("The EIATools app is designed for developers. It allows users to easily navigate 
-                                 the U.S. Energy Information Administration (EIA) API v2. Users can choose from the variety of sources
-                                 available through the API instantly."),
+                        shiny::p("The EIATools app is designed for developers. It allows users to easily navigate the U.S. Energy Information Administration (EIA) 
+                                 API v2. Users can choose from a variety of sources available through the API instantly."),
+                        
                         shiny::h5("Filtering Endpoints"),
-                        shiny::p("Filtering enpoints is completed on the left side-bar, which provides both dynamic and static filtering.
-                                 Users are encouraged to select filters in the order that they appear (top-down). Users have the option to reset
-                                 the filters at anytime by selecting 'Reset Query'. Users must click the 'Search' button to ensure the endpoints are
-                                 properly filtered in the 'Select Endpoints' section."),
+                        shiny::p("Filtering endpoints is completed on the left side-bar, which provides both dynamic and static filtering. Users are encouraged to 
+                                 select filters in the order that they appear (top-down). Users have the option to reset the filters at any time by selecting 'Reset Query'. 
+                                 Users must click the 'Search' button to ensure the endpoints are properly filtered in the 'Select Endpoints' section."),
+                        
                         shiny::h5("Selecting Endpoints"),
-                        shiny::p("Selecting endpoints is completed in the 'Select Endpoints' table. Users can left click on a row to select that rows
-                                 endpoint. Selection is made when the row is highlighted. Users can further sort each column, or search the full table
-                                 using the search function in the top-right corner. Users can choose the number of entries that display in the table at
-                                 any time, however please note that showing more entries may slow your device. Users can hold shift to select multiple rows at once. 
-                                 To do so, click the first row and hold shift; then scroll to the last row you want to select, and click this row. All rows
-                                 in between, will be selected."),
+                        shiny::p("Selecting endpoints is completed in the 'Select Endpoints' table. Users can left-click on a row to select that row's endpoint. Selection is 
+                                 made when the row is highlighted. Users can further sort each column or search the full table using the search function in the top-right corner. 
+                                 Users can choose the number of entries that display in the table at any time. However, please note that showing more entries may slow your device. 
+                                 Users can hold Shift to select multiple rows at once. To do so, click the first row, hold Shift, then scroll to the last row you want to select and 
+                                 click this row. All rows in between will be selected."),
+                        
                         shiny::h5("Transfering Rows For Export"),
-                        shiny::p("Once the user selects rows, they must click the 'Transfer Rows' button in the top-right corner. This will move selected rows
-                                 into the export ready 'Endpoints Selected' table. Users can remove these endpoints selecting the rows they want to remove,
-                                 and clicking 'Remove Rows'. For ease, users can also clear all rows by selecting 'Clear'."),
+                        shiny::p("Once the user selects rows, they must click the 'Transfer Rows' button in the top-right corner. This will move the selected rows into the export-ready 
+                                 'Endpoints Selected' table. Users can remove these endpoints by selecting the rows they want to remove and clicking 'Remove Rows'. For ease, users can 
+                                 also clear all rows by selecting 'Clear'."),
+                        
+                        shiny::h5("Exporting Endpoints"),
+                        shiny::p("Users can export the endpoints as an .rds file by naming the file under 'File Name' and selecting 'Download Endpoints'. This will prompt the user to select 
+                                 the file location within their file explorer."),
+                        
+                        shiny::p(shiny::HTML("<em>EIATools is under continuous development, and your feedback is important. If you encounter any errors or have a feature request, do not hesitate 
+                                             to get in contact with our team.</em>"))
           ),
           bslib::card(bslib::card_header("EIA Documentation"))
         )
