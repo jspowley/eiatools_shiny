@@ -80,5 +80,28 @@ ui <- bslib::page_navbar(
                 title = "Contacts",
                 bslib::layout_columns(
                 )
-                )
+                ),
+        bslib::nav_panel(
+          title = "Documentation",
+          bslib::layout_columns(
+            bslib::card(bslib::card_header("App Documentation"),
+                        shiny::h5("About EIATools"),
+                        shiny::p("The EIATools app is designed for developers. It allows users to easily navigate 
+                                 the U.S. Energy Information Administration (EIA) API v2. Users can choose from the variety of sources
+                                 available through the API instantly."),
+                        shiny::h5("Filtering Endpoints"),
+                        shiny::p("Filtering enpoints is completed on the left side-bar, which provides both dynamic and static filtering.
+                                 Users are encouraged to select filters in the order that they appear (top-down). Users have the option to reset
+                                 the filters at anytime by selecting 'Reset Query'. Users must click the 'Search' button to ensure the endpoints are
+                                 properly filtered in the 'Select Endpoints' section."),
+                        shiny::h5("Selecting Endpoints"),
+                        shiny::p("Selecting endpoints is completed in the 'Select Endpoints' table. Users can left click on a row to select that rows
+                                 endpoint. Selection is made when the row is highlighted. Users can further sort each column, or search the full table
+                                 using the search function in the top-right corner. Users can choose the number of entries that display in the table at
+                                 any time, however please note that showing more entries may slow your device."),
+                        shiny::h5("Transfering Rows For Export"),
+                        shiny::p("Once the user selects rows, they must click the 'Transfer Rows'"),
+          )
         )
+        )
+)
