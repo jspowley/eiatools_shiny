@@ -24,7 +24,7 @@ ui <- bslib::page_navbar(
                     
                     # Route 3
                     
-                        
+                        shiny::uiOutput("route_3_ui"),
                     
                     # Frequency
                         shiny::uiOutput("freq_ui"),
