@@ -231,17 +231,22 @@ server <- function(input, output) {
       dplyr::select(nickname, dplyr::everything())
     
     if(is.null(r$all_selected)){
+      print("New Selection Set")
       r$all_selected <- selected_endpoints
+      print(r$all_selected)
     }else{
+      print("Merged Selection Set")
       r$all_selected <- dplyr::bind_rows(r$all_selected, selected_endpoints) %>% 
-        dplyr::distinct(-nickname)
+        dplyr::distinct(dplyr::across(-nickname), .keep_all = TRUE)
+      print(r$all_selected)
     }
     # Display the selected rows in the "Endpoints Selected" card
     # output$selected_endpoints <- renderDT(r$all_selected, editable = list(target = "cell", columns = 1))
-    output$selected_endpoints <- renderRHandsontable({
-      rhandsontable(r$all_selected, readOnly = TRUE) %>% 
-      hot_col("nickname", readOnly = FALSE, type = "text")  # Only columnA editable
-    })
+    col_cap <- length(colnames(r$all_selected))
+    
+    output$selected_endpoints <- renderDT(r$all_selected,
+                                          editable = list(target = "cell", 
+                                          disable = list(columns = c(2:col_cap))))
   })
   
   shiny::observeEvent(r$displayed_table, {

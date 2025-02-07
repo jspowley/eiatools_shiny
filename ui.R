@@ -50,22 +50,8 @@ ui <- bslib::page_navbar(
                         # https://jsfiddle.net/0am85ght/
                         # https://cran.r-project.org/web/packages/rhandsontable/vignettes/intro_rhandsontable.html
                         
-                    tags$style(HTML("
-                        .handsontable {
-                                background: #1e1e1e;
-                                color: #ffffff;}
-                        .handsontable td {
-                                background: #2b2b2b;
-                                color: #ffffff;}
-                        .handsontable th {
-                                background: #333333;
-                                color: #ffffff;}
-                        .wtBorder {
-                        border-color: #555555;}")
-                        ),
-                        rHandsontableOutput("selected_endpoints"),
-                        full_screen = TRUE
-                        ),
+                        DT::DTOutput("selected_endpoints"),
+                    ),
                     bslib::card(bslib::card_header("Export"),
                         shiny::textInput("file_name", "File Name:"),
                         layout_columns(
