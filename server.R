@@ -43,7 +43,14 @@ server <- function(input, output) {
                          label = "Frequency:",
                          choices = freqs)
     })
+    
     r$freq_init <- TRUE
+    
+    if("route_2_id" %in% colnames(table_init)){
+      output$route_2_ui <- shiny::renderUI({
+        shiny::selectizeInput("route_2", "Path 1:", table_init$route_2_name %>% unique() %>% append("(All)",.), selected = "(All)")
+      })
+    }
     
     # print(str(table_init))
     

@@ -20,11 +20,11 @@ ui <- bslib::page_navbar(
                     
                     # Route 2
                     
-                        shiny::uiOutput("route_2_ui")
+                        shiny::uiOutput("route_2_ui"),
                     
                     # Route 3
                     
-                        
+                        shiny::uiOutput("route_3_ui"),
                     
                     # Frequency
                         shiny::uiOutput("freq_ui"),
