@@ -17,6 +17,20 @@ server <- function(input, output) {
     table_init <- eiatools::data_index[(eiatools::data_index %>% names()) == table_id] %>% .[[1]]
     r$displayed_table <- table_init
     
+    # Handling facet mapping edge cases upfront (in general, keeps the mapping architecture cleaner on the data maintenance end)
+    # EIA in their infamous wisdom have used two conventions for sector, and then had the audacity to cross pollinate usage of descriptions between them...
+    # This tool was not designed to handle needless many to many relationships, as a result this preprocessing step is necessary.
+    
+    # Case and point: eiatools::data_index$electricity %>% select(fueltypeid, fuelTypeDescription, fuelid, fueltype, fuelDescription, fuel2002, type, `type-name`) %>% distinct() %>% View()
+    if(table_id == "electricity"){
+      table_init <- table_init %>% dplyr::mutate(
+        sector_general_description = dplyr::case_when(
+          is.na(sectorName) ~ sectorDescription,
+          is.na(sectorDescription) ~ sectorName,
+          TRUE ~ NA
+        ))
+    }
+    
     # Rendering the frequency options
     # updates to input$frequency
     freqs <- table_init %>% pull(freq) %>% unique()
@@ -54,6 +68,7 @@ server <- function(input, output) {
         print("id==desc")
         facet_dict[[f]] <- table_init %>% 
           dplyr::transmute(id = !!sym(f), desc = !!sym(f_desc)) %>% 
+          dplyr::mutate(desc = stringr::str_to_title(desc)) %>% 
           dplyr::distinct() %>% 
           dplyr::rowwise() %>% 
           dplyr::mutate(id = list(id), .groups = "keep") # %>% 
@@ -62,6 +77,7 @@ server <- function(input, output) {
         print("id!=desc")
         facet_dict[[f]] <- table_init %>% 
           dplyr::transmute(id = !!sym(f), desc = !!sym(f_desc)) %>% 
+          dplyr::mutate(desc = stringr::str_to_title(desc)) %>% 
           dplyr::distinct() %>% 
           dplyr::group_by(desc) %>% 
           dplyr::summarise(id = list(unique(id)), .groups = "keep") # %>% 
