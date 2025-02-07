@@ -283,6 +283,23 @@ server <- function(input, output) {
     r$all_selected$nickname[[r_ind]] <- n_name
     print(r$all_selected)
   })
+  
+  shiny::observeEvent(input$remove_btn, {
+    
+    col_cap <- length(colnames(r$all_selected))
+    
+    removal_range <- input$selected_endpoints_rows_selected
+    filter_range <- !c(1:nrow(r$all_selected)) %in% removal_range
+    filter_range <- c(1:nrow(r$all_selected))[filter_range]
+    
+    r$all_selected <- r$all_selected %>% dplyr::slice(filter_range)
+    
+    output$selected_endpoints <- renderDT(r$all_selected,
+                                          editable = list(target = "cell", 
+                                                          disable = list(columns = c(2:col_cap))),
+                                          options = list(dom = "t",
+                                                         ordering = FALSE))
+  })
   # Update Table Based On Frequency Dropdown
   #shiny::observeEvent(input$frequency, {
   #  if (!is.null(r$table) && !is.null(input$frequency)) {

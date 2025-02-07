@@ -48,7 +48,7 @@ ui <- bslib::page_navbar(
                         fluidRow(
                            column(8, "Ednpoints Selected"),
                            column(2, actionButton("remove_btn", "Remove Rows")),
-                           column(2, actionButton("clear_btn", "Clear Selected"))
+                           column(2, actionButton("clear_btn", "Clear"))
                         )
                     ),
                         # Display of currently selected endpoints go here
