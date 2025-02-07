@@ -18,6 +18,14 @@ ui <- bslib::page_navbar(
                                            choices = eiatools::app_dictionary$tables %>% dplyr::pull(route_1_name),
                                            selected = "Petroleum"),
                     
+                    # Route 2
+                    
+                        shiny::uiOutput("route_2_ui")
+                    
+                    # Route 3
+                    
+                        
+                    
                     # Frequency
                         shiny::uiOutput("freq_ui"),
                     # Facets
