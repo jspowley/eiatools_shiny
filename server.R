@@ -50,6 +50,11 @@ server <- function(input, output) {
       output$route_2_ui <- shiny::renderUI({
         shiny::selectizeInput("route_2", "Path 1:", table_init$route_2_name %>% unique() %>% append("(All)",.), selected = "(All)")
       })
+    }else{
+      output$route_2_ui <- shiny::renderUI({shiny::selectizeInput("route_2","","(All)", selected = "(All)")})
+      output$route_2_ui <- shiny::renderUI({NULL})
+      print("Route 2 Nulled")
+      print(input$route_2)
     }
     
     # print(str(table_init))
@@ -115,18 +120,32 @@ server <- function(input, output) {
     r$facets <- facets
   })
   
+  # Revised to include all immediate update function streams:
+  # Data handling only.
   # Frequency Updates Apply Automatically, and Immediately Affect Facets. 
   # This is due to timeframe signifnciantly affecting what information is reported.
-  observeEvent(input$frequency, {
+  observeEvent(c(input$frequency, input$route_3),{
       print("Frequency Updates")
       print(str(input$frequency))
+      
       if(!input$frequency == "NA"){
         print("Freq Supplied")
-        r$table <- r$table_init %>% dplyr::filter(freq == input$frequency)
+        table <- r$table_init %>% dplyr::filter(freq == input$frequency)
       }else{
         print("Freq Reset")
-        r$table <- r$table_init
+        table <- r$table_init
       }
+      
+      if("route_2_name" %in% colnames(r$table_init)){
+        
+      }
+      
+      if("route_3_name" %in% colnames(r$table_init)){
+        
+      }
+      # Triggers followup tasks
+      r$table <- table
+      
       if(is.null(r$facet_update)){
         r$facet_update <- 1
       }else{
