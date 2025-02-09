@@ -442,13 +442,18 @@ server <- function(input, output) {
   r$api_key <- NULL
   r$data <- NULL
   
-  observeEvent(input$api_submit, {
-    r$api_key <- input$api_key
-  })
-  
   observeEvent(input$transfer_visual, {
+    r$api_key <- input$api_key
     shiny::req(r$api_key)
     shiny::req(nrow(r$all_selected) > 0)
+    
+    shinyalert::shinyalert(
+      title = "Generating Data",
+      text = "Please naviagte to the Visulization tab to view your data. The data may take some time to load, this popup will close when your data is ready.",
+      type = "info",
+      showConfirmButton = FALSE,
+      timer = 0
+    )
     
     r$data <- r$all_selected %>%
       eiatools::dindex_get_data(r$api_key) %>% 
@@ -512,6 +517,7 @@ server <- function(input, output) {
         )
     })
 
+    shinyalert::closeAlert() ## This automatically closes the pop up, to let users know data is ready to view on vis pane
   })
   
   
