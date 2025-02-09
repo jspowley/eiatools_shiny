@@ -86,36 +86,25 @@ ui <- bslib::page_navbar(
             ),
           col_widths = c(3,9))
         ),
-        
-        bslib::nav_panel(
-                title = "Contacts",
-                bslib::layout_columns(
-                )
-                ),
         bslib::nav_panel(
           title = "Documentation",
           bslib::layout_columns(
             bslib::card(bslib::card_header("App Documentation"),
-                        shiny::h5("About EIATools"),
-                        shiny::p("The EIATools app is designed for developers. It allows users to easily navigate the U.S. Energy Information Administration (EIA) 
-                                 API v2. Users can choose from a variety of sources available through the API instantly."),
+                        shiny::h3("About EIATools"),
+                        shiny::h5("Design Principles"),
+                        shiny::p("This app and it's accompanying package was designed to streamline visibility and access to EIA data when developing analytics in R. It removes to fundamental flaws of he EIA API browser; the first being a lack of visibilty surrounding combinations of facets and their relevance, and the second being the inability to bulk export specific API calls or multiple data series. This package simplifies the process. Search freely or narrowly, select your tables, rename them, and export the endpoints for use in R. After your done, your data is one function call away! Enjoy!"),
                         
                         shiny::h5("Filtering Endpoints"),
-                        shiny::p("Filtering endpoints is completed on the left side-bar, which provides both dynamic and static filtering. Users are encouraged to 
-                                 select filters in the order that they appear (top-down). Users have the option to reset the filters at any time by selecting 'Reset Query'. 
-                                 Users must click the 'Search' button to ensure the endpoints are properly filtered in the 'Select Endpoints' section."),
+                        shiny::p("Filtering endpoints is completed on the left side-bar. Table, endpoint pathing, and frequency update dynamically. You'll immediately see the facet availability and selection table narrow to reflect your selection. This is especially helpful for large sections of EIA's site such as Coal and Electricity, since it narrows the range of choices to what's relevant. Facets are shown below frequency. Multiple can be selected at a time, and results can be shown and options narrowed even further by clicking search. All selection fields have the ability to search by keyword by clicking in the top bar. To reset your query, hit the clear fields button then click search again."),
                         
                         shiny::h5("Selecting Endpoints"),
-                        shiny::p("Selecting endpoints is completed in the 'Select Endpoints' table. Users can left-click on a row to select that row's endpoint. Selection is 
-                                 made when the row is highlighted. Users can further sort each column or search the full table using the search function in the top-right corner. 
+                        shiny::p("Selecting endpoints is completed in the 'Select Endpoints' table. Select rows by clicking (or shift clicking) to highlight rows blue. These can be transfered into your table selection by clicking 'Transfer Rows' Users can further sort each column or search the full table using the search function in the top-right corner. 
                                  Users can choose the number of entries that display in the table at any time. However, please note that showing more entries may slow your device. 
                                  Users can hold Shift to select multiple rows at once. To do so, click the first row, hold Shift, then scroll to the last row you want to select and 
                                  click this row. All rows in between will be selected."),
                         
-                        shiny::h5("Transfering Rows For Export"),
-                        shiny::p("Once the user selects rows, they must click the 'Transfer Rows' button in the top-right corner. This will move the selected rows into the export-ready 
-                                 'Endpoints Selected' table. Users can remove these endpoints by selecting the rows they want to remove and clicking 'Remove Rows'. For ease, users can 
-                                 also clear all rows by selecting 'Clear'."),
+                        shiny::h5("Preparing for Export"),
+                        shiny::p("Once a user has selected and tranferred there rows into the 'Rows Selected' table, they are now able to prepare the selection for export. They can remove rows from the selection in a similar fashion to seletting rows previously, using the 'Remove Rows' button. It is also reommended that nicknames are added to this table. To add a nickname for each table selection, double click on a cell in the 'Nickname' column. Then type your Nickname and click outside of the cell to confirm the entry. This nickname will be reatined in your data, when your table selection is used in an API call later."),
                         
                         shiny::h5("Exporting Endpoints"),
                         shiny::p("Users can export the endpoints as an .rds file by naming the file under 'File Name' and selecting 'Download Endpoints'. This will prompt the user to select 
@@ -124,30 +113,27 @@ ui <- bslib::page_navbar(
                         shiny::p(shiny::HTML("<em>EIATools is under continuous development, and your feedback is important. If you encounter any errors or have a feature request, do not hesitate 
                                              to get in contact with our team.</em>"))
           ),
-          bslib::card(bslib::card_header("Delevoper Documentation"),
-                      shiny::h5("About R Package"),
-                      shiny::p("The eiatools repository on GitHub is a comprehensive toolset designed for calling, cleaning, manipulating, and finding data from the U.S. Energy Information Administration (EIA). 
-                               This repository provides a range of functions to streamline the process of working with EIA data, making it easier for users to access and analyze energy-related information. 
-                               Whether you're a researcher, data analyst, or energy enthusiast, eiatools offers a robust solution for handling EIA data efficiently."),
-                      shiny::h5("Installation"),
-                      shiny::p("To install the R eiatools package. The following lines of code can be added to your file:"),
+          bslib::layout_columns(
+          bslib::card(bslib::card_header("Package Documentation"),
+                      shiny::h5("Features and Functions"),
+                      shiny::p("The EIAtools package compliments this apps functionality directly. It contains 2 core feature sets: Endpoint Data Collection and Endpoint indexing/Documentation. Data Collection from an endpoint falls within the standard use of this app and package. Using *dindex_get_data* with any of the .rds tables you configure, you get direct integration with EIA's data, called using your API key. The second set of features allows eiatools to stay up to date with EIA's provisioned data. Useage of route_tree() and data_tree() ensures both this package and app can be maintained, but also allows users to develop and update an index of EIA's data heiraarchy on their own."),
+                      shiny::h5("Package Installation"),
                       HTML('<pre><code>
                           install.packages("devtools")
                           devtools::install_github("https://github.com/jspowley/eiatools")
                           </code></pre>'),
-                      shiny::h5("Working With The App Exported File"),
-                      shiny::p("When exporting from the EIATools app, the user is selects a location to store the .rds file. To load the endpoints file into your R enviorment, use the following code:"),
+                      shiny::h5("Working with the Endpoint .rds File"),
                       HTML('<pre><code>
                           library(eiatools)
                           library(tidyverse)
                           
-                          readRDS("your_file_path")
-                          </code></pre>'),
-                      shiny::p("While the previous code imports the endpoints stored in your .rds file, it does not request any data from the API. To request data, use the following function from eiatools:"),
-                      HTML('<pre><code>
                           readRDS("your_file_path") %>% eiatools::dindex_get_data("your_api_key")
-                          </code></pre>'),
-                      )
+                          </code></pre>')
+                      ),
+          bslib::card(bslib::card_header("Contacts"),
+                      
+        ), col_widths = c(12,12)
+        )
         )
         )
 )
