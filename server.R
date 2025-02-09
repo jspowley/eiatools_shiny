@@ -217,8 +217,10 @@ server <- function(input, output) {
   
   observeEvent(c(r$update, r$facet_update), {
     
+    # Pivoted to local facets
+    facets <- r$table %>% unique_facets
     print("Facet Updating")
-    facet_select <- sapply(r$facets, function(f_name){input[[paste0("f_",f_name)]]}, simplify = FALSE)
+    facet_select <- sapply(facets, function(f_name){input[[paste0("f_",f_name)]]}, simplify = FALSE)
     print(is.null(input$frequency))
     print(is.na(input$frequency))
     print(is.character(input$frequency))
@@ -234,11 +236,11 @@ server <- function(input, output) {
     # print(str(facet_select))
     # Creating a temporary image here prevents updating prematurely before applying all filters...
     table_image <- r$table
-    for(f_target in r$facets){
+    for(f_target in facets){
       
       print(f_target)
       
-      other_facets <- r$facets
+      other_facets <- facets
       other_facets <- other_facets[!other_facets %in% f_target]
       table_image <- r$table
       
@@ -272,7 +274,7 @@ server <- function(input, output) {
         dplyr::summarise(id = list(unique(id)), .groups = "keep") %>% 
         dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
       
-      if(nrow(dict_out) > 2000 & length(r$facets) > 1){
+      if(nrow(dict_out) > 2000 & length(facets) > 1){
         dict_out <- data.frame("id" = NA, "desc" = "Too Many Choices! Please Filter Using Other Categories")
       }
       
@@ -290,7 +292,7 @@ server <- function(input, output) {
     print("UI Push for Facets")
     # Push updates to UI, narrowing facet options to only those relevant to the current search
     output$facet_ui <- renderUI({
-      lapply(r$facets, function(f) { #lapply handles the UI context better, based on a few stack overflow threads. Not my typical workflow but manages niche cases like this.
+      lapply(facets, function(f) { #lapply handles the UI context better, based on a few stack overflow threads. Not my typical workflow but manages niche cases like this.
         selectizeInput(
           multiple = TRUE,
           inputId = paste0("f_", f),
@@ -305,7 +307,7 @@ server <- function(input, output) {
     # Rendering changes to DT
     print("Applying Changes to DT")
     output_dt <- r$table
-    for(f in r$facets){
+    for(f in facets){
       print(f)
       target_vec <- r$facet_dict[f][[1]] %>% dplyr::filter(desc %in% facet_select[[f]]) %>% pull(id) %>% unlist()
       print(str(target_vec))
