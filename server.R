@@ -227,6 +227,7 @@ server <- function(input, output) {
   
   observeEvent(c(r$update, r$facet_update), {
     
+    print("Facet Updates")
     # Pivoted to local facets
     facets <- r$table %>% unique_facets()
     mapped_facets <- facet_desc_map %>% dplyr::filter(table == r$table_id) %>% dplyr::pull(facet)
@@ -392,12 +393,6 @@ server <- function(input, output) {
     shiny::updateSelectizeInput(inputId = "frequency", selected = "NA")
     shiny::updateSelectizeInput(inputId = "route_2", selected = "(All)")
     shiny::updateSelectizeInput(inputId = "route_3", selected = "(All)")
-    
-    if(is.null(r$facet_update)){
-      r$facet_update <- 1
-    }else{
-      r$facet_update <- r$facet_update + 1
-    }
   })
   
   # Function for updating nicknames
