@@ -81,9 +81,9 @@ ui <- bslib::page_navbar(
         bslib::nav_panel(
           title = "Visualization",
           bslib::layout_columns(
-            bslib::card(bslib::card_header("Inputs"),
+            bslib::card(bslib::card_header("Options"),
                         shiny::textInput("api_key", "API Key"),
-                        shiny::actionButton("api_submit", "Submit API Key")
+                        shiny::actionButton("download_csv", "Download Data")
             ),
           bslib::card(bslib::card_header("Visual"),
                         plotly::plotlyOutput("data_chart")
