@@ -452,10 +452,10 @@ server <- function(input, output) {
     
     r$data <- r$all_selected %>%
       eiatools::dindex_get_data(r$api_key) %>% 
-      dplyr::select(period, value)
+      dplyr::select(period, value, series)
     
     output$data_chart <- plotly::renderPlotly({
-      plotly::plot_ly(data = r$data, x = ~period, y = ~value, type = 'scatter', mode = 'lines') %>%
+      plotly::plot_ly(data = r$data, x = ~period, y = ~value, color = ~series, type = 'scatter', mode = 'lines') %>%
         plotly::layout(
           xaxis = list(
             title = list(text = "Period", font = list(color = 'white')),
@@ -502,6 +502,12 @@ server <- function(input, output) {
               xanchor = "right",
               yanchor = "bottom"
             )
+          ),
+          legend = list(
+            bgcolor = '#212529',
+            bordercolor = 'white',
+            borderwidth = 2,
+            font = list(color = 'white')
           )
         )
     })
