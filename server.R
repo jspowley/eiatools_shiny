@@ -46,18 +46,20 @@ server <- function(input, output) {
     
     r$freq_init <- TRUE
     
-    if("route_2_id" %in% colnames(table_init)){
+    if("route_2_name" %in% colnames(table_init)){
       output$route_2_ui <- shiny::renderUI({
         shiny::selectizeInput("route_2", "Path 1:", table_init$route_2_name %>% unique() %>% append("(All)",.), selected = "(All)")
       })
     }else{
-      output$route_2_ui <- shiny::renderUI({shiny::selectizeInput("route_2","","(All)", selected = "(All)")})
+      shiny::updateSelectizeInput(inputId = "route_2", selected = "(All)")
       output$route_2_ui <- shiny::renderUI({NULL})
       print("Route 2 Nulled")
       print(input$route_2)
     }
     
-    
+    r$r3_enabled <- FALSE
+    output$route_3_ui <- renderUI({NULL})
+
     # print(str(table_init))
     
     #if(!is.null)
@@ -157,7 +159,7 @@ server <- function(input, output) {
         
         # Handling Route 3 if it exists
         
-        if("route_3_name" %in% colnames(r$table_init)){
+        if("route_3_name" %in% colnames(r$table_init) & !input$route_2 == "(All)"){
           
           route_3_options <- table %>% 
             dplyr::select(route_3_name) %>% 
@@ -167,9 +169,11 @@ server <- function(input, output) {
             append("(All)",.)
           
           if(!is.null(input$route_3)){
-            if(input$route_3 %in% route_3_options){
+            if(input$route_3 %in% route_3_options & r$r3_enabled){
               select_r3 <- input$route_3
+              r3_enabled <- TRUE
             }else{
+              r$r3_enabled <- TRUE
               select_r3 <- "(All)"
             }
           }else{
@@ -186,6 +190,8 @@ server <- function(input, output) {
             table <- table %>% dplyr::filter(route_3_name == input$route_3)
           }
           
+        }else{
+          output$route_3_ui <- renderUI({NULL})
         }
         
       }
@@ -362,6 +368,8 @@ server <- function(input, output) {
       shiny::updateSelectizeInput(inputId = paste0("f_",f), selected = NA)
     }
     shiny::updateSelectizeInput(inputId = "frequency", selected = "NA")
+    shiny::updateSelectizeInput(inputId = "route_2", selected = "(All)")
+    shiny::updateSelectizeInput(inputId = "route_3", selected = "(All)")
   })
   
   # Function for updating nicknames
