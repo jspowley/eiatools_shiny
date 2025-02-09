@@ -487,6 +487,21 @@ server <- function(input, output) {
               xref = "paper", yref = "paper",
               line = list(color = "white", width = 2)
             )
+          ),
+          annotations = list(
+            list(
+              x = 1,
+              y = 0,
+              xref = "paper",
+              yref = "paper",
+              text = "Source: U.S. Energy Information Administration",
+              showarrow = FALSE,
+              font = list(
+                color = "white"
+              ),
+              xanchor = "right",
+              yanchor = "bottom"
+            )
           )
         )
     })
