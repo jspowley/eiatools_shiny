@@ -456,8 +456,9 @@ server <- function(input, output) {
     )
     
     r$data <- r$all_selected %>%
-      eiatools::dindex_get_data(r$api_key) %>% 
-      dplyr::select(period, value, series)
+      eiatools::dindex_get_data(r$api_key)
+    
+    print(r$data)
     
     output$data_chart <- plotly::renderPlotly({
       plotly::plot_ly(data = r$data, x = ~period, y = ~as.numeric(value), color = ~series, type = 'scatter', mode = 'lines') %>%
@@ -517,7 +518,7 @@ server <- function(input, output) {
         )
     })
 
-    shinyalert::closeAlert() ## This automatically closes the pop up, to let users know data is ready to view on vis pane
+    shinyalert::closeAlert() ## This automatically closes the pop up, the idea is to let users know data is ready to view on vis pane.
   })
   
   
