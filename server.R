@@ -436,6 +436,93 @@ server <- function(input, output) {
       saveRDS(r$all_selected, f_in)
     }
   )
+  
+  ##---Data Visualization [START]
+  
+  r$api_key <- NULL
+  r$data <- NULL
+  
+  observeEvent(input$transfer_visual, {
+    r$api_key <- input$api_key
+    shiny::req(r$api_key)
+    shiny::req(nrow(r$all_selected) > 0)
+    
+    shinyalert::shinyalert(
+      title = "Generating Data",
+      text = "Please naviagte to the Visulization tab to view your data. The data may take some time to load, this popup will close when your data is ready.",
+      type = "info",
+      showConfirmButton = FALSE,
+      timer = 0
+    )
+    
+    r$data <- r$all_selected %>%
+      eiatools::dindex_get_data(r$api_key) %>% 
+      dplyr::select(period, value, series)
+    
+    output$data_chart <- plotly::renderPlotly({
+      plotly::plot_ly(data = r$data, x = ~period, y = ~value, color = ~series, type = 'scatter', mode = 'lines') %>%
+        plotly::layout(
+          xaxis = list(
+            title = list(text = "Period", font = list(color = 'white')),
+            linecolor = 'white',
+            tickfont = list(color = 'white'),
+            gridcolor = '#4e5861',
+            gridwidth = 0.05,
+            zeroline = FALSE,
+            showgrid = TRUE,
+            showline = TRUE
+          ),
+          yaxis = list(
+            title = list(text = "Value", font = list(color = 'white')),
+            linecolor = 'white',
+            tickfont = list(color = 'white'),
+            gridcolor = '#4e5861',
+            gridwidth = 0.05,
+            zeroline = FALSE,
+            showgrid = TRUE,
+            showline = TRUE
+          ),
+          paper_bgcolor = '#212529', 
+          plot_bgcolor = '#212529',
+          margin = list(l = 10, r = 10, t = 10, b = 10),
+          shapes = list(
+            list(
+              type = "rect",
+              x0 = 0, y0 = 0, x1 = 1, y1 = 1,
+              xref = "paper", yref = "paper",
+              line = list(color = "white", width = 2)
+            )
+          ),
+          annotations = list(
+            list(
+              x = 1,
+              y = 0,
+              xref = "paper",
+              yref = "paper",
+              text = "Source: U.S. Energy Information Administration",
+              showarrow = FALSE,
+              font = list(
+                color = "white"
+              ),
+              xanchor = "right",
+              yanchor = "bottom"
+            )
+          ),
+          legend = list(
+            bgcolor = '#212529',
+            bordercolor = 'white',
+            borderwidth = 2,
+            font = list(color = 'white')
+          )
+        )
+    })
+
+    shinyalert::closeAlert() ## This automatically closes the pop up, to let users know data is ready to view on vis pane
+  })
+  
+  
+  ##---Data Visualization [END]
+  
   # Update Table Based On Frequency Dropdown
   #shiny::observeEvent(input$frequency, {
   #  if (!is.null(r$table) && !is.null(input$frequency)) {

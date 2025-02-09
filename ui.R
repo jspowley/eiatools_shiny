@@ -69,7 +69,8 @@ ui <- bslib::page_navbar(
                     ),
                     bslib::card(bslib::card_header("Export"),
                         shiny::textInput("file_name", "File Name:"),
-                        shiny::downloadButton("download_rds", "Download Endpoints")
+                        shiny::downloadButton("download_rds", "Download Endpoints"),
+                        shiny::actionButton("transfer_visual", "Transfer To Visualization")
                       ),
                     col_widths = c(12,9,3),
                     row_heights = c(2,1)
@@ -83,6 +84,9 @@ ui <- bslib::page_navbar(
             bslib::card(bslib::card_header("Inputs"),
                         shiny::textInput("api_key", "API Key"),
                         shiny::actionButton("api_submit", "Submit API Key")
+            ),
+          bslib::card(bslib::card_header("Visual"),
+                        plotly::plotlyOutput("data_chart")
             ),
           col_widths = c(3,9))
         ),
