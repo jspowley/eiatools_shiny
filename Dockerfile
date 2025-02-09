@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     git
 
-RUN R -e "install.packages(c('devtools', 'shiny', 'bslib', 'tidyverse', 'eiatools', 'DT', 'rlang', 'rhandsontable'), dependencies = TRUE, repos = 'https://packagemanager.rstudio.com/cran/latest')"
+RUN R -e "install.packages(c('devtools', 'shiny', 'bslib', 'tidyverse', 'eiatools', 'DT', 'rlang', 'rhandsontable', 'plotly'), dependencies = TRUE, repos = 'https://packagemanager.rstudio.com/cran/latest')"
 RUN R -e "devtools::install_github('https://github.com/jspowley/eiatools')"
 
 RUN git clone https://github.com/jspowley/eiatools_shiny.git /srv/shiny-server/eiatools_shiny
