@@ -124,7 +124,29 @@ ui <- bslib::page_navbar(
                         shiny::p(shiny::HTML("<em>EIATools is under continuous development, and your feedback is important. If you encounter any errors or have a feature request, do not hesitate 
                                              to get in contact with our team.</em>"))
           ),
-          bslib::card(bslib::card_header("EIA Documentation")
+          bslib::card(bslib::card_header("Delevoper Documentation"),
+                      shiny::h5("About R Package"),
+                      shiny::p("The eiatools repository on GitHub is a comprehensive toolset designed for calling, cleaning, manipulating, and finding data from the U.S. Energy Information Administration (EIA). 
+                               This repository provides a range of functions to streamline the process of working with EIA data, making it easier for users to access and analyze energy-related information. 
+                               Whether you're a researcher, data analyst, or energy enthusiast, eiatools offers a robust solution for handling EIA data efficiently."),
+                      shiny::h5("Installation"),
+                      shiny::p("To install the R eiatools package. The following lines of code can be added to your file:"),
+                      HTML('<pre><code>
+                          install.packages("devtools")
+                          devtools::install_github("https://github.com/jspowley/eiatools")
+                          </code></pre>'),
+                      shiny::h5("Working With The App Exported File"),
+                      shiny::p("When exporting from the EIATools app, the user is selects a location to store the .rds file. To load the endpoints file into your R enviorment, use the following code:"),
+                      HTML('<pre><code>
+                          library(eiatools)
+                          library(tidyverse)
+                          
+                          readRDS("your_file_path")
+                          </code></pre>'),
+                      shiny::p("While the previous code imports the endpoints stored in your .rds file, it does not request any data from the API. To request data, use the following function from eiatools:"),
+                      HTML('<pre><code>
+                          readRDS("your_file_path") %>% eiatools::dindex_get_data("your_api_key")
+                          </code></pre>'),
                       )
         )
         )
