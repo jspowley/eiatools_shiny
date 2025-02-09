@@ -19,7 +19,7 @@ jobs:
       - name: Build and push Docker image (with python and node)
         uses: docker/build-push-action@v5
         with:
-          context: ./rstudio-python-node
-          file: ./rstudio-python-node/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           tags: jspowley/eiatools_shiny:latest
