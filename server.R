@@ -436,6 +436,42 @@ server <- function(input, output) {
       saveRDS(r$all_selected, f_in)
     }
   )
+  
+  ##---Data Visualization [START]
+  
+  r$api_key <- NULL
+  r$data <- NULL
+  
+  observeEvent(input$api_submit, {
+    r$api_key <- input$api_key
+  })
+  
+  observeEvent(input$transfer_visual, {
+    shiny::req(r$api_key)
+    shiny::req(nrow(r$all_selected) > 0)
+    
+    r$data <- r$all_selected %>%
+      eiatools::dindex_get_data(r$api_key) %>% 
+      dplyr::select(period, value)
+    
+    print(r$data)
+  })
+  
+  observeEvent(input$plot_data, {
+    shiny::req(r$data)
+    
+    output$data_chart <- plotly::renderPlotly({
+      
+      p <- plotly::plot_ly(r$data, x = ~date, y = ~value) %>% 
+        plotly::add_lines(y = plotly::to_basic(y_var), name = y_var)
+      
+      p %>%
+        plotly::layout(title = "", xaxis = list(title = "Date"), yaxis = list(title = "Value"))
+    })
+  })
+  
+  ##---Data Visualization [END]
+  
   # Update Table Based On Frequency Dropdown
   #shiny::observeEvent(input$frequency, {
   #  if (!is.null(r$table) && !is.null(input$frequency)) {
