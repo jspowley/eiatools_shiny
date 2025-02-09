@@ -7,6 +7,7 @@ library(rlang)
 library(rhandsontable)
 library(htmltools)
 library(rvest)
+library(plotly)
 
 unique_facets <- function(data_index_table){
   data_index_table %>% pull(facets) %>% unlist() %>% unique()

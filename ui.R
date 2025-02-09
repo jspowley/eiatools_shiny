@@ -86,7 +86,7 @@ ui <- bslib::page_navbar(
                         shiny::actionButton("api_submit", "Submit API Key")
             ),
           bslib::card(bslib::card_header("Visual"),
-                        shiny::plotOutput("data_chart")
+                        plotly::plotlyOutput("data_chart")
             ),
           col_widths = c(3,9))
         ),

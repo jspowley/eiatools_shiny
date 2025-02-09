@@ -454,21 +454,12 @@ server <- function(input, output) {
       eiatools::dindex_get_data(r$api_key) %>% 
       dplyr::select(period, value)
     
-    print(r$data)
+    output$data_chart <- plotly::renderPlotly({
+      plotly::plot_ly(data = r$data, x = ~period, y = ~value, type = 'scatter', mode = 'lines')
+    })
+
   })
   
-  observeEvent(input$plot_data, {
-    shiny::req(r$data)
-    
-    output$data_chart <- plotly::renderPlotly({
-      
-      p <- plotly::plot_ly(r$data, x = ~date, y = ~value) %>% 
-        plotly::add_lines(y = plotly::to_basic(y_var), name = y_var)
-      
-      p %>%
-        plotly::layout(title = "", xaxis = list(title = "Date"), yaxis = list(title = "Value"))
-    })
-  })
   
   ##---Data Visualization [END]
   
