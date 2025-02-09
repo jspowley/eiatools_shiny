@@ -460,7 +460,7 @@ server <- function(input, output) {
       dplyr::select(period, value, series)
     
     output$data_chart <- plotly::renderPlotly({
-      plotly::plot_ly(data = r$data, x = ~period, y = ~value, color = ~series, type = 'scatter', mode = 'lines') %>%
+      plotly::plot_ly(data = r$data, x = ~period, y = ~as.numeric(value), color = ~series, type = 'scatter', mode = 'lines') %>%
         plotly::layout(
           xaxis = list(
             title = list(text = "Period", font = list(color = 'white')),
