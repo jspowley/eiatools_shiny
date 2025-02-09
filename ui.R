@@ -35,7 +35,7 @@ ui <- bslib::page_navbar(
                                             label = "Search"),
                     # Reset
                         shiny::actionButton(inputId = "reset",
-                                        label = "Reset Query"),
+                                        label = "Clear Fields"),
                     # Demo Output
                         shiny::uiOutput("concat"),
                         shiny::uiOutput("search_nrow")
