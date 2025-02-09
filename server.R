@@ -53,8 +53,8 @@ server <- function(input, output) {
     }else{
       shiny::updateSelectizeInput(inputId = "route_2", selected = "(All)")
       output$route_2_ui <- shiny::renderUI({NULL})
-      print("Route 2 Nulled")
-      print(input$route_2)
+      # print("Route 2 Nulled")
+      # print(input$route_2)
     }
     
     r$r3_enabled <- FALSE
@@ -80,7 +80,7 @@ server <- function(input, output) {
       f_desc <- facet_desc_map %>% dplyr::filter(table == r$table_id & facet == f) %>% dplyr::pull(desc)
       
       if(f_desc == f){
-        print("id==desc")
+        # print("id==desc")
         facet_dict[[f]] <- table_init %>% 
           dplyr::transmute(id = !!sym(f), desc = !!sym(f_desc)) %>% 
           dplyr::mutate(desc = stringr::str_to_title(desc)) %>% 
@@ -89,7 +89,7 @@ server <- function(input, output) {
           dplyr::mutate(id = list(id), .groups = "keep") # %>% 
           # dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
       }else{
-        print("id!=desc")
+        # print("id!=desc")
         facet_dict[[f]] <- table_init %>% 
           dplyr::transmute(id = !!sym(f), desc = !!sym(f_desc)) %>% 
           dplyr::mutate(desc = stringr::str_to_title(desc)) %>% 
@@ -98,7 +98,7 @@ server <- function(input, output) {
           dplyr::summarise(id = list(unique(id)), .groups = "keep") # %>% 
           # dplyr::bind_rows(data.frame("id" = NA, "desc" = "(None Selected)"), .)
       }
-      print("EXITING")
+      # print("EXITING")
       
       if(nrow(facet_dict[[f]]) > 2000 & length(facets) > 1){
         facet_dict[[f]] <- data.frame("id" = NA, "desc" = "Too Many Choices! Please Filter Using Other Categories")
@@ -128,19 +128,19 @@ server <- function(input, output) {
   # Frequency Updates Apply Automatically, and Immediately Affect Facets. 
   # This is due to timeframe signifnciantly affecting what information is reported.
   observeEvent(c(input$frequency, input$route_2, input$route_3),{
-      print("Frequency Updates")
-      print(str(input$frequency))
+    # print("Frequency Updates")
+    # print(str(input$frequency))
       
       if(!input$frequency == "NA"){
-        print("Freq Supplied")
+        # print("Freq Supplied")
         table <- r$table_init %>% dplyr::filter(freq == input$frequency)
       }else{
-        print("Freq Reset")
+        # print("Freq Reset")
         table <- r$table_init
       }
       
       if("route_2_name" %in% colnames(r$table_init)){
-        print(r$table_init)
+        # print(r$table_init)
         
         route_2_options <- table %>% 
           dplyr::select(route_2_name) %>% 
@@ -184,7 +184,7 @@ server <- function(input, output) {
             shiny::selectizeInput("route_3", "Path 2:", choices = route_3_options, selected = select_r3)
           })
           
-          print(input$route_3)
+          # print(input$route_3)
           
           if(!select_r3 == "(All)"){
             table <- table %>% dplyr::filter(route_3_name == input$route_3)
@@ -207,7 +207,7 @@ server <- function(input, output) {
   })
   
   observeEvent(input$update, {
-    print("Update Update")
+    # print("Update Update")
     if(is.null(r$update)){
       r$update <- 1
     }else{
@@ -218,13 +218,16 @@ server <- function(input, output) {
   observeEvent(c(r$update, r$facet_update), {
     
     # Pivoted to local facets
-    facets <- r$table %>% unique_facets
-    print("Facet Updating")
+    facets <- r$table %>% unique_facets()
+    mapped_facets <- facet_desc_map %>% dplyr::filter(table == r$table_id) %>% dplyr::pull(facet)
+    facets <- facets[facets %in% mapped_facets]
+    
+    # print("Facet Updating")
     facet_select <- sapply(facets, function(f_name){input[[paste0("f_",f_name)]]}, simplify = FALSE)
-    print(is.null(input$frequency))
-    print(is.na(input$frequency))
-    print(is.character(input$frequency))
-    print(input$frequency)
+    # print(is.null(input$frequency))
+    # print(is.na(input$frequency))
+    # print(is.character(input$frequency))
+    # print(input$frequency)
     output$concat <- renderText(
       paste0(
       "Search: ", r$table_id, ", ",
@@ -238,14 +241,19 @@ server <- function(input, output) {
     table_image <- r$table
     for(f_target in facets){
       
-      print(f_target)
+      # print(f_target)
       
+      # print("Pulling others")
       other_facets <- facets
+      # print("Subsetting others to be unique")
       other_facets <- other_facets[!other_facets %in% f_target]
+      # print("pulling local image")
       table_image <- r$table
       
       # A) All non_target_facet selections applied t targets table
       for(f in other_facets){
+        
+        # print(paste("Other Facet", f))
         # 1. Convert descriptions selected into the appropriate facet ids
         # print("Filtering table")
         # print(str(facet_select[f][[1]]))
@@ -288,8 +296,8 @@ server <- function(input, output) {
         r$facet_dict[[f_target]] <- dict_out
       }
     }
-    print("exiting for loop")
-    print("UI Push for Facets")
+    # print("exiting for loop")
+    # print("UI Push for Facets")
     # Push updates to UI, narrowing facet options to only those relevant to the current search
     output$facet_ui <- renderUI({
       lapply(facets, function(f) { #lapply handles the UI context better, based on a few stack overflow threads. Not my typical workflow but manages niche cases like this.
@@ -305,15 +313,15 @@ server <- function(input, output) {
     })
     
     # Rendering changes to DT
-    print("Applying Changes to DT")
+    # print("Applying Changes to DT")
     output_dt <- r$table
     for(f in facets){
-      print(f)
+      # print(f)
       target_vec <- r$facet_dict[f][[1]] %>% dplyr::filter(desc %in% facet_select[[f]]) %>% pull(id) %>% unlist()
-      print(str(target_vec))
+      # print(str(target_vec))
       
       if(length(target_vec) > 0){
-        print(paste0("Filtering DT on ", f))
+        # print(paste0("Filtering DT on ", f))
       output_dt <- output_dt %>% 
         dplyr::filter(!!sym(f) %in% target_vec)
       }
@@ -329,14 +337,14 @@ server <- function(input, output) {
       dplyr::select(nickname, dplyr::everything())
     
     if(is.null(r$all_selected)){
-      print("New Selection Set")
+      # print("New Selection Set")
       r$all_selected <- selected_endpoints
-      print(r$all_selected)
+      # print(r$all_selected)
     }else{
-      print("Merged Selection Set")
+      # print("Merged Selection Set")
       r$all_selected <- dplyr::bind_rows(r$all_selected, selected_endpoints) %>% 
         dplyr::distinct(dplyr::across(-nickname), .keep_all = TRUE)
-      print(r$all_selected)
+      # print(r$all_selected)
     }
     # Display the selected rows in the "Endpoints Selected" card
     # output$selected_endpoints <- renderDT(r$all_selected, editable = list(target = "cell", columns = 1))
@@ -376,12 +384,12 @@ server <- function(input, output) {
   
   # Function for updating nicknames
   shiny::observeEvent(input$selected_endpoints_cell_edit,{
-    print("cells editted")
-    print(str(input$selected_endpoints_cell_edit))
+    # print("cells editted")
+    # print(str(input$selected_endpoints_cell_edit))
     r_ind <- input$selected_endpoints_cell_edit$row
     n_name <- input$selected_endpoints_cell_edit$value
     r$all_selected$nickname[[r_ind]] <- n_name
-    print(r$all_selected)
+    # print(r$all_selected)
   })
   
   shiny::observeEvent(input$remove_btn, {
