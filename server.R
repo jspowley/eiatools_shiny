@@ -449,7 +449,7 @@ server <- function(input, output) {
     
     shinyalert::shinyalert(
       title = "Generating Data",
-      text = "Please naviagte to the Visulization tab to view your data. The data may take some time to load, this popup will close when your data is ready.",
+      text = "Data may take some time to load, this popup will close when your data is ready. You can view your data in the Visualization tab.",
       type = "info",
       showConfirmButton = FALSE,
       timer = 0

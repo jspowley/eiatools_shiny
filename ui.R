@@ -68,7 +68,7 @@ ui <- bslib::page_navbar(
                         full_screen = TRUE
                     ),
                     bslib::card(bslib::card_header("Export"),
-                        shiny::textInput("file_name", "File Name:"),
+                                shiny::textInput("api_key", "API Key"),
                         shiny::downloadButton("download_rds", "Download Endpoints"),
                         shiny::actionButton("transfer_visual", "Transfer To Visualization")
                       ),
@@ -82,7 +82,6 @@ ui <- bslib::page_navbar(
           title = "Visualization",
           bslib::layout_columns(
             bslib::card(bslib::card_header("Options"),
-                        shiny::textInput("api_key", "API Key"),
                         shiny::actionButton("download_csv", "Download Data")
             ),
           bslib::card(bslib::card_header("Visual"),
@@ -111,8 +110,8 @@ ui <- bslib::page_navbar(
                         shiny::p("Once a user has selected and tranferred there rows into the 'Rows Selected' table, they are now able to prepare the selection for export. They can remove rows from the selection in a similar fashion to seletting rows previously, using the 'Remove Rows' button. It is also reommended that nicknames are added to this table. To add a nickname for each table selection, double click on a cell in the 'Nickname' column. Then type your Nickname and click outside of the cell to confirm the entry. This nickname will be reatined in your data, when your table selection is used in an API call later."),
                         
                         shiny::h5("Exporting Endpoints"),
-                        shiny::p("Users can export the endpoints as an .rds file by naming the file under 'File Name' and selecting 'Download Endpoints'. This will prompt the user to select 
-                                 the file location within their file explorer."),
+                        shiny::p("Users can export the endpoints as an .rds file by selecting 'Download Endpoints'. This will prompt the user to select 
+                                 the file location within their file explorer. Users may also choose to enter their API Key and view the data directly in the app."),
                         
                         shiny::p(shiny::HTML("<em>EIATools is under continuous development, and your feedback is important. If you encounter any errors or have a feature request, do not hesitate 
                                              to get in contact with our team.</em>"))
