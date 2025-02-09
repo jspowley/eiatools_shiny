@@ -24,12 +24,18 @@ unique_facets <- function(data_index_table){
 facet_desc_map <- tibble::tribble(
   ~table, ~facet, ~desc,
   
+  # Petroleum
+  
   "petroleum", "series", "series-description",
   "petroleum", "duoarea", "area-name",
   "petroleum", "process", "process-name",
   "petroleum", "product", "product-name",
   
+  # Short Term Energy Outlook
+  
   "steo", "seriesId", "seriesDescription",
+  
+  # Internation
   
   "international", "productId", "productName",
   "international", "activityId", "activityName",
@@ -37,6 +43,8 @@ facet_desc_map <- tibble::tribble(
   "international", "countryRegionTypeId", "countryRegionTypeName",
   "international", "dataFlagId", "dataFlagDescription",
   "international", "unit", "unitName",
+  
+  # Coal
   
   "coal", "mineStateId", "mineStateDescription",
   "coal", "coalRankId", "coalRankDescription",
@@ -65,32 +73,41 @@ facet_desc_map <- tibble::tribble(
   "coal", "mississippiRegionId", "mississippiRegionDescription",
   "coal", "mineStatusId", "mineStatusDescription",
   
+  # Crude Oil Imports
+  
   "crude-oil-imports", "originId", "originName",
   "crude-oil-imports", "originType", "originTypeName",
   "crude-oil-imports", "destinationId", "destinationName",
   "crude-oil-imports", "destinationType", "destinationTypeName",
   "crude-oil-imports", "gradeId", "gradeName",
   
-  "electricity", "stateid", "stateDescription",
+  # Electricity
+  
   "electricity", "sectorid", "sector_general_description",
   "electricity", "sector", "sector_general_description",
+  
   "electricity", "fueltypeid", "fuelTypeDescription", 
   "electricity", "respondent", "respondent-name", 
   "electricity", "type", "type-name", 
   "electricity", "fueltype", "type-name", 
   "electricity", "fuel2002", "fuelTypeDescription", 
   "electricity", "fuelid", "fuelDescription", 
+  
   "electricity", "subba", "subba-name", 
   "electricity", "parent", "parent-name", 
   "electricity", "fromba", "fromba-name", 
   "electricity", "toba", "toba-name", 
   "electricity", "timezone", "timezone-description", 
-  "electricity", "state", "stateId", 
   "electricity", "producertypeid", "producerTypeDescription", 
   "electricity", "energysourceid", "energySourceDescription", 
-  "electricity", "", "", 
-  "electricity", "", "", 
-  "electricity", "", "", 
+  
+  "electricity", "stateid", "state_general_description", 
+  "electricity", "location", "state_general_description", 
+  "electricity", "state", "state_general_description", 
+  "electricity", "stateId", "state_general_description", 
+  "electricity", "state", "state_general_description", 
+  "electricity", "stateID", "state_general_description", 
+
   
 )
 

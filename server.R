@@ -20,15 +20,25 @@ server <- function(input, output) {
     # Handling facet mapping edge cases upfront (in general, keeps the mapping architecture cleaner on the data maintenance end)
     # EIA in their infamous wisdom have used two conventions for sector, and then had the audacity to cross pollinate usage of descriptions between them...
     # This tool was not designed to handle needless many to many relationships, as a result this preprocessing step is necessary.
-    
     # Case and point: eiatools::data_index$electricity %>% select(fueltypeid, fuelTypeDescription, fuelid, fueltype, fuelDescription, fuel2002, type, `type-name`) %>% distinct() %>% View()
     if(table_id == "electricity"){
-      table_init <- table_init %>% dplyr::mutate(
+      table_init <- table_init %>% 
+        dplyr::mutate(
         sector_general_description = dplyr::case_when(
           is.na(sectorName) ~ sectorDescription,
           is.na(sectorDescription) ~ sectorName,
           TRUE ~ NA
         ))
+    }
+    
+    if(table_id == "electricity"){
+      table_init <- table_init %>% 
+        dplyr::mutate(
+          state_general_description = dplyr::case_when(
+            is.na(stateName) ~ stateDescription,
+            is.na(stateDescription) ~ stateName,
+            TRUE ~ NA
+          ))
     }
     
     # Rendering the frequency options
