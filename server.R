@@ -241,6 +241,8 @@ server <- function(input, output) {
     output$concat <- renderText(
       paste0(
       "Search: ", r$table_id, ", ",
+      ifelse(input$route_2 == "(All)", "", paste0(input$route_2, ", ")),
+      ifelse(input$route_3 == "(All)", "", paste0(input$route_3, ", ")),
       ifelse(input$frequency == "NA", "", paste0(input$frequency, ", ")),
       paste(unlist(facet_select), collapse = ", ")))
     
@@ -390,6 +392,12 @@ server <- function(input, output) {
     shiny::updateSelectizeInput(inputId = "frequency", selected = "NA")
     shiny::updateSelectizeInput(inputId = "route_2", selected = "(All)")
     shiny::updateSelectizeInput(inputId = "route_3", selected = "(All)")
+    
+    if(is.null(r$facet_update)){
+      r$facet_update <- 1
+    }else{
+      r$facet_update <- r$facet_update + 1
+    }
   })
   
   # Function for updating nicknames
