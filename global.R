@@ -97,17 +97,31 @@ facet_desc_map <- tibble::tribble(
   "electricity", "parent", "parent-name", 
   "electricity", "fromba", "fromba-name", 
   "electricity", "toba", "toba-name", 
-  "electricity", "timezone", "timezone-description", 
+  
+  "electricity", "timezone", "timezone", 
+  "electricity", "timezone-description", "timezone-description", 
+  "electricity", "timePeriod", "timePeriod",
+  
   "electricity", "producertypeid", "producerTypeDescription", 
   "electricity", "energysourceid", "energySourceDescription", 
+  "electricity", "energy_source_code", "energy-source-desc",
   
   "electricity", "stateid", "state_general_description", 
   "electricity", "location", "state_general_description", 
   "electricity", "state", "state_general_description", 
   "electricity", "stateId", "state_general_description", 
-  "electricity", "state", "state_general_description", 
   "electricity", "stateID", "state_general_description", 
-
+  
+  "electricity", "technology", "technology", 
+  "electricity", "entityid", "entityName",
+  "electricity", "plantid", "plantName",
+  "electricity", "plantCode", "plantName",
+  "electricity", "generatorid", "generatorid",
+  "electricity", "prime_mover_code", "prime_mover_code",
+  "electricity", "primeMover", "primeMover",
+  "electricity", "balancing_authority_code", "balancing-authority-name",
+  "electricity", "status", "statusDescription",
+  "electricity", "unit", "unit"
   
 )
 
