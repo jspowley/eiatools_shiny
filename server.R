@@ -57,6 +57,7 @@ server <- function(input, output) {
       print(input$route_2)
     }
     
+    
     # print(str(table_init))
     
     #if(!is.null)
@@ -124,7 +125,7 @@ server <- function(input, output) {
   # Data handling only.
   # Frequency Updates Apply Automatically, and Immediately Affect Facets. 
   # This is due to timeframe signifnciantly affecting what information is reported.
-  observeEvent(c(input$frequency, input$route_3),{
+  observeEvent(c(input$frequency, input$route_2, input$route_3),{
       print("Frequency Updates")
       print(str(input$frequency))
       
@@ -137,12 +138,58 @@ server <- function(input, output) {
       }
       
       if("route_2_name" %in% colnames(r$table_init)){
+        print(r$table_init)
+        
+        route_2_options <- table %>% 
+          dplyr::select(route_2_name) %>% 
+          tidyr::drop_na() %>% 
+          dplyr::pull(route_2_name) %>% 
+          unique() %>% 
+          append("(All)",.)
+
+        output$route_2_ui <- shiny::renderUI({
+          shiny::selectizeInput("route_2", "Path 1:", choices = route_2_options, selected = input$route_2)
+        })
+        
+        if(!input$route_2 == "(All)"){
+          table <- table %>% dplyr::filter(route_2_name == input$route_2)
+        }
+        
+        # Handling Route 3 if it exists
+        
+        if("route_3_name" %in% colnames(r$table_init)){
+          
+          route_3_options <- table %>% 
+            dplyr::select(route_3_name) %>% 
+            tidyr::drop_na() %>% 
+            dplyr::pull(route_3_name) %>% 
+            unique() %>% 
+            append("(All)",.)
+          
+          if(!is.null(input$route_3)){
+            if(input$route_3 %in% route_3_options){
+              select_r3 <- input$route_3
+            }else{
+              select_r3 <- "(All)"
+            }
+          }else{
+            select_r3 <- "(All)"
+          }
+          
+          output$route_3_ui <- shiny::renderUI({
+            shiny::selectizeInput("route_3", "Path 2:", choices = route_3_options, selected = select_r3)
+          })
+          
+          print(input$route_3)
+          
+          if(!select_r3 == "(All)"){
+            table <- table %>% dplyr::filter(route_3_name == input$route_3)
+          }
+          
+        }
         
       }
       
-      if("route_3_name" %in% colnames(r$table_init)){
-        
-      }
       # Triggers followup tasks
       r$table <- table
       
