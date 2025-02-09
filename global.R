@@ -121,7 +121,59 @@ facet_desc_map <- tibble::tribble(
   "electricity", "primeMover", "primeMover",
   "electricity", "balancing_authority_code", "balancing-authority-name",
   "electricity", "status", "statusDescription",
-  "electricity", "unit", "unit"
+  "electricity", "unit", "unit",
+  
+  # Natural Gas
+  
+  "natural-gas", "duoarea", "area-name",
+  "natural-gas", "product", "product-name",
+  "natural-gas", "process", "process-name",
+  "natural-gas", "series", "series-description",
+  
+  # Nuclear Outages
+  
+  "nuclear-outages", "facility", "facilityName",
+  "nuclear-outages", "generator", "generator",
+  
+  # State Energy Data System
+  
+  "seds", "seriesId", "seriesDescription",
+  "seds", "stateId", "stateDescription",
+  
+  # Biomass
+  
+  "densified-biomass", "region", "region",
+  "densified-biomass", "fuelTypeId", "fuelTypeDescription",
+  "densified-biomass", "respondent", "respondent",
+  "densified-biomass", "stateId", "stateName",
+  "densified-biomass", "status", "status",
+  
+  # Total Energy
+  
+  "total-energy", "msn", "seriesDescription",
+  
+  # Annual Energy Outlook
+  
+  "aeo", "history", "history",
+  "aeo", "scenario", "scenarioDescription",
+  "aeo", "tableId", "tableName",
+  "aeo", "seriesId", "seriesName",
+  "aeo", "regionId", "regionName",
+  
+  # International Energy Outlook
+  
+  "ieo", "history", "history",
+  "ieo", "scenario", "scenarioDescription",
+  "ieo", "tableId", "tableName",
+  "ieo", "seriesId", "seriesName",
+  "ieo", "regionId", "regionName",
+  
+  # CO2 Emissions
+  
+  "co2-emissions", "sectorId", "sector-name",
+  "co2-emissions", "fuelId", "fuel-name",
+  "co2-emissions", "stateId", "state-name",
+  "co2-emissions", "seriesId", "series-name"
   
 )
 
