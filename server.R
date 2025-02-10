@@ -520,12 +520,25 @@ server <- function(input, output) {
   })
   
   output$download_csv <- shiny::downloadHandler(
-    print('download_clicked'),
     filename = function() { paste0("data_", Sys.Date(), ".csv") },
     content = function(file) {
       write.csv(r$data, file, row.names = FALSE)
     }
   )
+  
+  output$vis_data_select_ui <- shiny::renderUI({
+    shiny::selectInput(inputId = "vis_data_select",
+                       label = "Select Data Type:",
+                       choices = unique(r$data$DATA),
+                       selected = unique(r$data$DATA)[1])
+  })
+  
+  output$vis_nickname_select_ui <- shiny::renderUI({
+    shiny::selectInput(inputId = "vis_nickname_select",
+                       label = "Select Nickname:",
+                       choices = unique(r$data$NICKNAME),
+                       selected = unique(r$data$NICKNAME)[1])
+  })
   
   
   ##---Data Visualization [END]
