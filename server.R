@@ -552,7 +552,7 @@ server <- function(input, output) {
     print(df)
     
     ## Select the Y-axis based on Data Type selection
-    df <- df %>% dplyr::select(period, series, all_of(input$vis_data_select))  
+    df <- df %>% dplyr::select(period, series, dplyr::all_of(input$vis_data_select))  
     
     return(df)
   })
@@ -617,6 +617,68 @@ server <- function(input, output) {
             )
           )
       })
+  })
+  
+  observeEvent(input$vis_nickname_select, {
+    output$data_chart <- renderPlotly({
+      df <- filtered_data()
+      print(df)
+      plotly::plot_ly(data = df, x = ~period, y = as.numeric(df[[input$vis_data_select]]), color = ~series, type = 'scatter', mode = 'lines') %>%
+        plotly::layout(
+          xaxis = list(
+            title = list(text = "Period", font = list(color = 'white')),
+            linecolor = 'white',
+            tickfont = list(color = 'white'),
+            gridcolor = '#4e5861',
+            gridwidth = 0.05,
+            zeroline = FALSE,
+            showgrid = TRUE,
+            showline = TRUE
+          ),
+          yaxis = list(
+            title = list(text = "Value", font = list(color = 'white')),
+            linecolor = 'white',
+            tickfont = list(color = 'white'),
+            gridcolor = '#4e5861',
+            gridwidth = 0.05,
+            zeroline = FALSE,
+            showgrid = TRUE,
+            showline = TRUE
+          ),
+          paper_bgcolor = '#212529', 
+          plot_bgcolor = '#212529',
+          margin = list(l = 10, r = 10, t = 10, b = 10),
+          shapes = list(
+            list(
+              type = "rect",
+              x0 = 0, y0 = 0, x1 = 1, y1 = 1,
+              xref = "paper", yref = "paper",
+              line = list(color = "white", width = 2)
+            )
+          ),
+          annotations = list(
+            list(
+              x = 1,
+              y = 0,
+              xref = "paper",
+              yref = "paper",
+              text = "Source: U.S. Energy Information Administration",
+              showarrow = FALSE,
+              font = list(
+                color = "white"
+              ),
+              xanchor = "right",
+              yanchor = "bottom"
+            )
+          ),
+          legend = list(
+            bgcolor = '#212529',
+            bordercolor = 'white',
+            borderwidth = 2,
+            font = list(color = 'white')
+          )
+        )
+    })
   })
   
   
