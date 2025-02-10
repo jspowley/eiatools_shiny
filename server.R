@@ -529,30 +529,31 @@ server <- function(input, output) {
     shiny::selectInput(inputId = "vis_data_select",
                        label = "Select Data Type:",
                        choices = unique(r$all_selected$data),
-                       selected = unique(r$all_selected$data)[1])
+                       selected = unique(r$all_selected$data)[1],
+                       multiple = TRUE)
   })
   
   output$vis_nickname_select_ui <- shiny::renderUI({
     shiny::selectInput(inputId = "vis_nickname_select",
                        label = "Select Nickname:",
                        choices = unique(r$all_selected$nickname),
-                       selected = unique(r$all_selected$nickname)[1])
+                       selected = unique(r$all_selected$nickname)[1],
+                       multiple = TRUE)
   })
   
   filtered_data <- reactive({
     shiny::req(input$vis_data_select)
     
     df <- r$data
-    print(df) ## Data Exists
-    
+
     ## Filter by nickname if a selection is made by user
     if (!is.null(input$vis_nickname_select) && length(input$vis_nickname_select) > 1) {
       df <- df %>% dplyr::filter(nickname %in% input$vis_nickname_select)
     }
-    print(df)
     
     ## Select the Y-axis based on Data Type selection
-    df <- df %>% dplyr::select(period, series, dplyr::all_of(input$vis_data_select))  
+    df <- df %>% dplyr::select(period, series, dplyr::all_of(input$vis_data_select))
+    print(df)
     
     return(df)
   })
@@ -560,7 +561,6 @@ server <- function(input, output) {
   observeEvent(input$vis_data_select, {
     output$data_chart <- renderPlotly({
       df <- filtered_data()
-      print(df)
         plotly::plot_ly(data = df, x = ~period, y = as.numeric(df[[input$vis_data_select]]), color = ~series, type = 'scatter', mode = 'lines') %>%
           plotly::layout(
             xaxis = list(
