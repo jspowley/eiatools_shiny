@@ -452,13 +452,11 @@ server <- function(input, output) {
       text = "Data may take some time to load, this popup will close when your data is ready. You can view your data in the Visualization tab.",
       type = "info",
       showConfirmButton = FALSE,
-      timer = 0
+      timer = 0 ## This forces manual close apparently, which is done at the bottom of this event.
     )
     
     r$data <- r$all_selected %>%
       eiatools::dindex_get_data(r$api_key)
-    
-    print(r$data)
     
     output$data_chart <- plotly::renderPlotly({
       plotly::plot_ly(data = r$data, x = ~period, y = ~as.numeric(value), color = ~series, type = 'scatter', mode = 'lines') %>%
@@ -520,6 +518,14 @@ server <- function(input, output) {
 
     shinyalert::closeAlert() ## This automatically closes the pop up, the idea is to let users know data is ready to view on vis pane.
   })
+  
+  output$download_csv <- shiny::downloadHandler(
+    print('download_clicked'),
+    filename = function() { paste0("data_", Sys.Date(), ".csv") },
+    content = function(file) {
+      write.csv(r$data, file, row.names = FALSE)
+    }
+  )
   
   
   ##---Data Visualization [END]

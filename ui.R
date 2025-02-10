@@ -82,7 +82,7 @@ ui <- bslib::page_navbar(
           title = "Visualization",
           bslib::layout_columns(
             bslib::card(bslib::card_header("Options"),
-                        shiny::actionButton("download_csv", "Download Data")
+                        shiny::downloadButton("download_csv", "Download Data")
             ),
           bslib::card(bslib::card_header("Visual"),
                         plotly::plotlyOutput("data_chart")
