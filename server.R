@@ -455,9 +455,9 @@ server <- function(input, output) {
       timer = 0 ## This forces manual close apparently, which is done at the bottom of this event.
     )
     
+    print(r$all_selected)
     r$data <- r$all_selected %>%
       eiatools::dindex_get_data(r$api_key)
-    print(r$data)
     
     output$data_chart <- plotly::renderPlotly({
       plotly::plot_ly(data = r$data, x = ~period, y = ~as.numeric(value), color = ~series, type = 'scatter', mode = 'lines') %>%
@@ -530,8 +530,8 @@ server <- function(input, output) {
   output$vis_data_select_ui <- shiny::renderUI({
     shiny::selectInput(inputId = "vis_data_select",
                        label = "Select Data Type:",
-                       choices = unique(r$data$DATA),
-                       selected = unique(r$data$DATA)[1])
+                       choices = unique(r$all_selected$data),
+                       selected = unique(r$all_selected$data)[1])
   })
   
   output$vis_nickname_select_ui <- shiny::renderUI({
@@ -545,7 +545,7 @@ server <- function(input, output) {
   ##---Data Visualization [END]
   
   # Update Table Based On Frequency Dropdown
-  #shiny::observeEvent(input$frequency, {
+  # shiny::observeEvent(input$frequency, {
   #  if (!is.null(r$table) && !is.null(input$frequency)) {
   #    filtered_table <- r$table %>% dplyr::filter(freq == input$frequency)
   #    output$displayed_table <- renderDT(filtered_table)
