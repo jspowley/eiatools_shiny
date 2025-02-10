@@ -457,6 +457,7 @@ server <- function(input, output) {
     
     r$data <- r$all_selected %>%
       eiatools::dindex_get_data(r$api_key)
+    print(r$data)
     
     output$data_chart <- plotly::renderPlotly({
       plotly::plot_ly(data = r$data, x = ~period, y = ~as.numeric(value), color = ~series, type = 'scatter', mode = 'lines') %>%
@@ -537,7 +538,7 @@ server <- function(input, output) {
     shiny::selectInput(inputId = "vis_nickname_select",
                        label = "Select Nickname:",
                        choices = unique(r$data$NICKNAME),
-                       selected = unique(r$data$NICKNAME)[1])
+                       selected = 'None')
   })
   
   
