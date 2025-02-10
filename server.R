@@ -537,8 +537,8 @@ server <- function(input, output) {
   output$vis_nickname_select_ui <- shiny::renderUI({
     shiny::selectInput(inputId = "vis_nickname_select",
                        label = "Select Nickname:",
-                       choices = unique(r$data$NICKNAME),
-                       selected = 'None')
+                       choices = unique(r$all_selected$nickname),
+                       selected = unique(r$all_selected$nickname)[1])
   })
   
   
