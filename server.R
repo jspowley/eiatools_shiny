@@ -492,7 +492,7 @@ server <- function(input, output) {
                        label = "Select Data Type:",
                        choices = setNames(unique(r$all_selected$data), unique(r$all_selected$data)),
                        selected = unique(r$all_selected$data)[1],
-                       multiple = TRUE)
+                       multiple = FALSE)
   })
   
   output$vis_nickname_select_ui <- shiny::renderUI({
