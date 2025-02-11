@@ -623,7 +623,22 @@ server <- function(input, output) {
     })
   })
   
+  # Contacts
+  observeEvent(input$copy_email1, {
+    writeClipboard("jpowley@ualberta.ca")
+  })
   
+  observeEvent(input$copy_phone1, {
+    writeClipboard("+1 587 590 4107")
+  })
+  
+  observeEvent(input$copy_email2, {
+    writeClipboard("bnboyko@ualberta.ca")
+  })
+  
+  observeEvent(input$copy_phone2, {
+    writeClipboard("1+ 780 999 9999")
+  })
   ##---Data Visualization [END]
   
   # Update Table Based On Frequency Dropdown

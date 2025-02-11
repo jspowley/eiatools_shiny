@@ -142,10 +142,10 @@ ui <- bslib::page_navbar(
                               p("Trade Analyst"),
                               div(icon("envelope"), 
                                   "jpowley@ualberta.ca",
-                                  actionButton("copy_email", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
+                                  actionButton("copy_email1", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
                               div(icon("phone"), 
                                   "+1 587 590 4107",
-                                  actionButton("copy_phone", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
+                                  actionButton("copy_phone1", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
                               div(icon("linkedin"), 
                                   a("LinkedIn Profile", href = "www.linkedin.com/in/powleyjustin"))),
                       bslib::card(
@@ -153,10 +153,10 @@ ui <- bslib::page_navbar(
                                 p("Boyko Wealth"),
                                 div(icon("envelope"), 
                                     "bnboyko@ualberta.ca",
-                                actionButton("copy_email", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
+                                actionButton("copy_email2", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
                                 div(icon("phone"), 
                                     "+1 780 999 9999",
-                                    actionButton("copy_phone", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
+                                    actionButton("copy_phone2", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
                                 div(icon("linkedin"), 
                                     a("LinkedIn Profile", href = "https://www.linkedin.com/in/brayden-boyko/"))
                       ), col_widths = c(6,6))
