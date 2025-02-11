@@ -136,6 +136,9 @@ ui <- bslib::page_navbar(
                           </code></pre>')
                       ),
           bslib::card(bslib::card_header("Contacts"),
+                      # Chat GPT used for this contact form. Main reason being we want tsomething that looks and feels conventional and familiar, and an LLM naturally does this when it comes to web design.
+                      # I find AI particularly good at JS styling. Why? The internet is chalk full of training material. That being said, it's terrible at Quarto, due to the finished product being converted to HTML already most of the time.
+                      # Modified to suit our needs.
                       bslib::layout_column_wrap(
                       bslib::card(
                               h4("Justin Powley"),
