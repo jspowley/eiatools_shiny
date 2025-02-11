@@ -637,7 +637,7 @@ server <- function(input, output) {
   })
   
   observeEvent(input$copy_phone2, {
-    writeClipboard("1+ 780 999 9999")
+    writeClipboard("1+ 587 873 1874")
   })
   ##---Data Visualization [END]
   

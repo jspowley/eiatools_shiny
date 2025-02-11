@@ -158,7 +158,7 @@ ui <- bslib::page_navbar(
                                     "bnboyko@ualberta.ca",
                                 actionButton("copy_email2", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
                                 div(icon("phone"), 
-                                    "+1 780 999 9999",
+                                    "+1 587 873 1874",
                                     actionButton("copy_phone2", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
                                 div(icon("linkedin"), 
                                     a("LinkedIn Profile", href = "https://www.linkedin.com/in/brayden-boyko/", target = "_blank"))
