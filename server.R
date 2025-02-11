@@ -441,6 +441,15 @@ server <- function(input, output) {
   r$api_key <- NULL
   r$data <- NULL
   
+  r$groups <- c('series', 'seriesid', 'productid', 'productname', 'activityid', 
+                'activityname', 'countryregionid', 'countryregiontypeid', 
+                'countryregiontypename', 'dataflagid', 'duoarea', 'product', 
+                'process', 'minestateid', 'coalrankid', 'originid', 'origintype',
+                'destinationid', 'destinationtype', 'gradeid', 'stateid', 'sectorid',
+                'facility', 'generator', 'region', 'msn', 'history', 'scenario', 
+                'tableid', 'fuelid'
+                )
+  
   observeEvent(input$transfer_visual, {
     r$api_key <- input$api_key
     shiny::req(r$api_key)
@@ -467,10 +476,18 @@ server <- function(input, output) {
     }
   )
   
+  output$vis_group_select_ui <- shiny::renderUI({
+    shiny::selectInput(inputId = "vis_group_select",
+                       label = "Select Group Type:",
+                       choices = setNames(unique(r$all_selected$data), unique(r$all_selected$data)),
+                       selected = unique(r$all_selected$data)[1],
+                       multiple = TRUE)
+  })
+  
   output$vis_data_select_ui <- shiny::renderUI({
     shiny::selectInput(inputId = "vis_data_select",
                        label = "Select Data Type:",
-                       choices = unique(r$all_selected$data),
+                       choices = setNames(unique(r$all_selected$data), unique(r$all_selected$data)),
                        selected = unique(r$all_selected$data)[1],
                        multiple = TRUE)
   })
