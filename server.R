@@ -479,7 +479,7 @@ server <- function(input, output) {
     shiny::selectInput(inputId = "vis_nickname_select",
                        label = "Select Nickname:",
                        choices = unique(r$all_selected$nickname),
-                       selected = unique(r$all_selected$nickname)[1],
+                       selected = unique(r$all_selected$nickname),
                        multiple = TRUE)
   })
   
@@ -496,7 +496,7 @@ server <- function(input, output) {
   })
   
   
-  observeEvent(input$update_visual, {
+  observeEvent(input$transfer_visual, {
     output$data_chart <- renderPlotly({
       df <- filtered_data()
       plotly::plot_ly(data = df, x = ~period, y = as.numeric(df[[input$vis_data_select]]), color = ~series, type = 'scatter', mode = 'lines') %>%
