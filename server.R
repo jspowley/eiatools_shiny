@@ -441,13 +441,13 @@ server <- function(input, output) {
   r$api_key <- NULL
   r$data <- NULL
   
-  r$groups <- c('series', 'seriesid', 'productid', 'productname', 'activityid', 
-                'activityname', 'countryregionid', 'countryregiontypeid', 
-                'countryregiontypename', 'dataflagid', 'duoarea', 'product', 
-                'process', 'minestateid', 'coalrankid', 'originid', 'origintype',
-                'destinationid', 'destinationtype', 'gradeid', 'stateid', 'sectorid',
+  r$groups <- c('series', 'seriesId', 'productId', 'productName', 'activityId', 
+                'activityName', 'countryRegionId', 'countryRegionTypeId', 
+                'countryRegionTypeName', 'dataFlagid', 'duoarea', 'product', 
+                'process', 'mineStateId', 'coalRankId', 'originId', 'originType',
+                'destinationId', 'destinationType', 'gradeId', 'stateId', 'sectorTd',
                 'facility', 'generator', 'region', 'msn', 'history', 'scenario', 
-                'tableid', 'fuelid'
+                'tableId', 'fuelId'
                 )
   
   observeEvent(input$transfer_visual, {
@@ -475,8 +475,6 @@ server <- function(input, output) {
       write.csv(r$data, file, row.names = FALSE)
     }
   )
-  
-  
   
   output$vis_group_select_ui <- shiny::renderUI({
     
@@ -509,10 +507,11 @@ server <- function(input, output) {
     shiny::req(input$vis_data_select, input$vis_nickname_select)
     
     df <- r$data
+    valid_data_select <- input$vis_data_select[input$vis_data_select != ""]
     
     df <- df %>%
       dplyr::filter(is.na(nickname) | nickname %in% input$vis_nickname_select) %>%  ## Filters Nicknames
-      dplyr::select(period, input$vis_group_select, dplyr::all_of(input$vis_data_select), nickname)  ## Filters Data Type
+      dplyr::select(period, input$vis_group_select, dplyr::all_of(valid_data_select), nickname)  ## Filters Data Type
     
     return(df)
   })
