@@ -150,7 +150,7 @@ ui <- bslib::page_navbar(
                                   "+1 587 590 4107",
                                   actionButton("copy_phone1", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
                               div(icon("linkedin"), 
-                                  a("LinkedIn Profile", href = "www.linkedin.com/in/powleyjustin"))),
+                                  a("LinkedIn Profile", href = "www.linkedin.com/in/powleyjustin", target = "_blank"))),
                       bslib::card(
                                 h4("Brayden Boyko"),
                                 p("Boyko Wealth"),
@@ -161,7 +161,7 @@ ui <- bslib::page_navbar(
                                     "+1 780 999 9999",
                                     actionButton("copy_phone2", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
                                 div(icon("linkedin"), 
-                                    a("LinkedIn Profile", href = "https://www.linkedin.com/in/brayden-boyko/"))
+                                    a("LinkedIn Profile", href = "https://www.linkedin.com/in/brayden-boyko/", target = "_blank"))
                       ), col_widths = c(6,6))
         ), col_widths = c(12,12)
         )
