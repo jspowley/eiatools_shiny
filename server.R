@@ -481,9 +481,6 @@ server <- function(input, output) {
   output$vis_group_select_ui <- shiny::renderUI({
     
     available_groups <- intersect(r$groups, colnames(r$data)) ## Checks Which Groups Are Available In r$data and only shows them
-    print(r$data)
-    print(r$groups)
-    print(available_groups)
     
     shiny::selectInput(inputId = "vis_group_select",
                        label = "Select Group Type:",
@@ -514,8 +511,8 @@ server <- function(input, output) {
     df <- r$data
     
     df <- df %>%
-      dplyr::filter(nickname %in% input$vis_nickname_select) %>%  ## Filters Nicknames
-      dplyr::select(period, dplyr::all_of(input$vis_group_select), dplyr::all_of(input$vis_data_select), nickname)  ## Filters Data Type
+      dplyr::filter(is.na(nickname) | nickname %in% input$vis_nickname_select) %>%  ## Filters Nicknames
+      dplyr::select(period, input$vis_group_select, dplyr::all_of(input$vis_data_select), nickname)  ## Filters Data Type
     
     return(df)
   })
