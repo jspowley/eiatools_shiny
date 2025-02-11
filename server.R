@@ -476,11 +476,17 @@ server <- function(input, output) {
     }
   )
   
+  
+  
   output$vis_group_select_ui <- shiny::renderUI({
+    
+    available_groups <- intersect(r$groups, colnames(r$data)) ## Checks Which Groups Are Available In r$data and only shows them
+    print(available_groups)
+    
     shiny::selectInput(inputId = "vis_group_select",
                        label = "Select Group Type:",
-                       choices = setNames(unique(r$all_selected$data), unique(r$all_selected$data)),
-                       selected = unique(r$all_selected$data)[1],
+                       choices = setNames(available_groups, available_groups),
+                       selected = available_groups[1],
                        multiple = TRUE)
   })
   
@@ -516,7 +522,7 @@ server <- function(input, output) {
   observeEvent(input$transfer_visual, {
     output$data_chart <- renderPlotly({
       df <- filtered_data()
-      plotly::plot_ly(data = df, x = ~period, y = as.numeric(df[[input$vis_data_select]]), color = ~series, type = 'scatter', mode = 'lines') %>%
+      plotly::plot_ly(data = df, x = ~period, y = as.numeric(df[[input$vis_data_select]]), color = df[[input$vis_group_select]], type = 'scatter', mode = 'lines') %>%
         plotly::layout(
           xaxis = list(
             title = list(text = "Period", font = list(color = 'white')),
