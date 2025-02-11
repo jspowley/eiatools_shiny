@@ -136,7 +136,30 @@ ui <- bslib::page_navbar(
                           </code></pre>')
                       ),
           bslib::card(bslib::card_header("Contacts"),
-                      
+                      bslib::layout_column_wrap(
+                      bslib::card(
+                              h4("Justin Powley"),
+                              p("Trade Analyst"),
+                              div(icon("envelope"), 
+                                  "jpowley@ualberta.ca",
+                                  actionButton("copy_email", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
+                              div(icon("phone"), 
+                                  "+1 587 590 4107",
+                                  actionButton("copy_phone", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
+                              div(icon("linkedin"), 
+                                  a("LinkedIn Profile", href = "www.linkedin.com/in/powleyjustin"))),
+                      bslib::card(
+                                h4("Brayden Boyko"),
+                                p("Boyko Wealth"),
+                                div(icon("envelope"), 
+                                    "bnboyko@ualberta.ca",
+                                actionButton("copy_email", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
+                                div(icon("phone"), 
+                                    "+1 780 999 9999",
+                                    actionButton("copy_phone", icon("clipboard"), class = "btn btn-sm btn-outline-primary")),
+                                div(icon("linkedin"), 
+                                    a("LinkedIn Profile", href = "https://www.linkedin.com/in/brayden-boyko/"))
+                      ), col_widths = c(6,6))
         ), col_widths = c(12,12)
         )
         )
