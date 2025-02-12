@@ -507,7 +507,7 @@ server <- function(input, output) {
     shiny::req(input$vis_data_select, input$vis_nickname_select)
     
     df <- r$data
-    valid_data_select <- input$vis_data_select[input$vis_data_select != ""]
+    valid_data_select <- input$vis_data_select
     
     df <- df %>%
       dplyr::filter(is.na(nickname) | nickname %in% input$vis_nickname_select) %>%  ## Filters Nicknames
@@ -516,6 +516,9 @@ server <- function(input, output) {
     return(df)
   })
   
+  ### ERROR MESSAGE RELATED TO COLOUR BY SERIES:
+  ### Warning in RColorBrewer::brewer.pal(N, "Set2") :
+  ###    minimal value for n is 3, returning requested palette with 3 different levels
   
   observeEvent(input$transfer_visual, {
     output$data_chart <- renderPlotly({
