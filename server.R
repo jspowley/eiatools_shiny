@@ -441,14 +441,15 @@ server <- function(input, output) {
   r$api_key <- NULL
   r$data <- NULL
   
-  r$groups <- c('series', 'seriesId', 'productId', 'productName', 'activityId', 
-                'activityName', 'countryRegionId', 'countryRegionTypeId', 
-                'countryRegionTypeName', 'dataFlagid', 'duoarea', 'product', 
-                'process', 'mineStateId', 'coalRankId', 'originId', 'originType',
-                'destinationId', 'destinationType', 'gradeId', 'stateId', 'sectorTd',
-                'facility', 'generator', 'region', 'msn', 'history', 'scenario', 
-                'tableId', 'fuelId'
-                )
+  r$groups <- c('auto', 'auto1') ## MANY:ONE Work Around (auto1 may be used in back up situations in future updates)
+  #r$groups <- c('series', 'seriesId', 'productId', 'productName', 'activityId', 
+                #'activityName', 'countryRegionId', 'countryRegionTypeId', 
+                #'countryRegionTypeName', 'dataFlagid', 'duoarea', 'product',                  ## THESE ARE ALL AVAILABLE GROUPS
+                #'process', 'mineStateId', 'coalRankId', 'originId', 'originType',             ## PLAN TO MAKE MANY:ONE FIXES IN FUTURE
+                #'destinationId', 'destinationType', 'gradeId', 'stateId', 'sectorTd',
+                #'facility', 'generator', 'region', 'msn', 'history', 'scenario', 
+                #'tableId', 'fuelId'
+  #)
   
   observeEvent(input$transfer_visual, {
     r$api_key <- input$api_key
@@ -462,9 +463,19 @@ server <- function(input, output) {
       showConfirmButton = FALSE,
       timer = 0 ## This forces manual close apparently, which is done at the bottom of this event.
     )
+
+    r$group_facets <- r$all_selected %>%
+      dplyr::select(facets) %>%
+      dplyr::distinct() %>%
+      dplyr::pull(facets) %>%
+      as.character() %>% 
+      toupper()
     
     r$data <- r$all_selected %>%
-      eiatools::dindex_get_data(r$api_key)
+      eiatools::dindex_get_data(r$api_key) %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(auto = paste(dplyr::across(dplyr::all_of(r$group_facets)), collapse = "_")) %>% 
+      ungroup()
     
     shinyalert::closeAlert() ## This automatically closes the pop up, the idea is to let users know data is ready to view on vis pane.
   })
