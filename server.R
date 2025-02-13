@@ -457,12 +457,12 @@ server <- function(input, output) {
       year <- as.numeric(substr(date, 1, 4))
       quarter <- as.numeric(substr(date, 7, 7))
       month <- (quarter - 1) * 3 + 1
-      return(format(make_date(year, month, 1), "%d-%m-%Y"))
+      return(format(lubridate::make_date(year, month, 1), "%d-%m-%Y"))
     }
     
     ## "YYYY-MM" format
     if (grepl("^\\d{4}-\\d{2}$", date)) {
-      return(format(as.Date(paste0(date, "-01")), "%d-%m-%Y"))  # Return the first day of the month
+      return(format(as.Date(paste0(date, "-01")), "%d-%m-%Y"))
     }
     
     ## "YYYY-MM-DD" format
