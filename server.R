@@ -457,29 +457,30 @@ server <- function(input, output) {
       year <- as.numeric(substr(date, 1, 4))
       quarter <- as.numeric(substr(date, 7, 7))
       month <- (quarter - 1) * 3 + 1
-      return(make_date(year, month, 1))
+      return(format(make_date(year, month, 1), "%d-%m-%Y"))
     }
     
     ## "YYYY-MM" format
     if (grepl("^\\d{4}-\\d{2}$", date)) {
-      return(as.Date(paste0(date, "-01")))  # Return the first day of the month
+      return(format(as.Date(paste0(date, "-01")), "%d-%m-%Y"))  # Return the first day of the month
     }
     
     ## "YYYY-MM-DD" format
     if (grepl("^\\d{4}-\\d{2}-\\d{2}$", date)) {
-      return(as.Date(date))
+      return(format(as.Date(date), "%d-%m-%Y"))
     }
     
     tryCatch({
-      return(as.Date(date, format = "%m/%d/%Y"))
+      return(format(as.Date(date, format = "%m/%d/%Y"), "%d-%m-%Y"))
     }, error = function(e) {
       tryCatch({
-        return(as.Date(date, format = "%d/%m/%Y"))
+        return(format(as.Date(date, format = "%d/%m/%Y"), "%d-%m-%Y"))
       }, error = function(e) {
         return(NA)
       })
     })
   }
+  
   
   observeEvent(input$transfer_visual, {
     r$api_key <- input$api_key
@@ -504,6 +505,7 @@ server <- function(input, output) {
       eiatools::dindex_get_data(r$api_key) %>%
       dplyr::mutate(auto = do.call(paste, c(dplyr::across(-c(period, where(is.numeric))), sep = "_")),
                     period = sapply(period, standardize_dates)) %>% 
+      dplyr::arrange(period) %>% 
       print(.)
     
     shinyalert::closeAlert() ## This automatically closes the pop up, the idea is to let users know data is ready to view on vis pane.
