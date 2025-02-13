@@ -9,6 +9,7 @@ library(htmltools)
 library(rvest)
 library(plotly)
 library(shinyalert)
+library(tidyselect)
 
 
 unique_facets <- function(data_index_table){

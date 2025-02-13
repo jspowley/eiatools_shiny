@@ -464,18 +464,16 @@ server <- function(input, output) {
       timer = 0 ## This forces manual close apparently, which is done at the bottom of this event.
     )
 
-    r$group_facets <- r$all_selected %>%
+    group_facets <- r$all_selected %>%
       dplyr::select(facets) %>%
       dplyr::distinct() %>%
-      dplyr::pull(facets) %>%
-      as.character() %>% 
-      toupper()
+      dplyr::pull(facets) %>% 
+      as.list()
     
     r$data <- r$all_selected %>%
       eiatools::dindex_get_data(r$api_key) %>%
-      dplyr::rowwise() %>%
-      dplyr::mutate(auto = paste(dplyr::across(dplyr::all_of(r$group_facets)), collapse = "_")) %>% 
-      ungroup()
+      dplyr::mutate(auto = do.call(paste, c(dplyr::across(-c(period, value)), sep = "_"))) %>% 
+      print(.)
     
     shinyalert::closeAlert() ## This automatically closes the pop up, the idea is to let users know data is ready to view on vis pane.
   })
@@ -527,6 +525,14 @@ server <- function(input, output) {
     return(df)
   })
   
+  truncate_text <- function(text) {
+    if (nchar(text) > 7) {
+      paste0(substr(text, 1, 7), "...")
+    } else {
+      text
+    }
+  }
+  
   ### ERROR MESSAGE RELATED TO COLOUR BY SERIES:
   ### Warning in RColorBrewer::brewer.pal(N, "Set2") :
   ###    minimal value for n is 3, returning requested palette with 3 different levels
@@ -534,7 +540,8 @@ server <- function(input, output) {
   observeEvent(input$transfer_visual, {
     output$data_chart <- renderPlotly({
       df <- filtered_data()
-      plotly::plot_ly(data = df, x = ~period, y = as.numeric(df[[input$vis_data_select]]), color = df[[input$vis_group_select]], type = 'scatter', mode = 'lines') %>%
+      truncated_text <- sapply(df[[input$vis_group_select]], truncate_text)
+      plotly::plot_ly(data = df, x = ~period, y = as.numeric(df[[input$vis_data_select]]), color = truncated_text, type = 'scatter', mode = 'lines') %>%
         plotly::layout(
           xaxis = list(
             title = list(text = "Period", font = list(color = 'white')),
