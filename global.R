@@ -10,6 +10,7 @@ library(rvest)
 library(plotly)
 library(shinyalert)
 library(tidyselect)
+library(lubridate)
 
 
 unique_facets <- function(data_index_table){
