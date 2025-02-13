@@ -472,7 +472,7 @@ server <- function(input, output) {
     
     r$data <- r$all_selected %>%
       eiatools::dindex_get_data(r$api_key) %>%
-      dplyr::mutate(auto = do.call(paste, c(dplyr::across(-c(period, value)), sep = "_"))) %>% 
+      dplyr::mutate(auto = do.call(paste, c(dplyr::across(-c(period, where(is.numeric))), sep = "_"))) %>% 
       print(.)
     
     shinyalert::closeAlert() ## This automatically closes the pop up, the idea is to let users know data is ready to view on vis pane.
